@@ -12,41 +12,46 @@ const COLORS = {
   negro:        { label: 'negro',        fabric: '#1B1A19', swatch: '#0E0E0E' },
   hueso:        { label: 'hueso',        fabric: '#F1EEE7', swatch: '#F1EEE7' },
   piedra:       { label: 'piedra',       fabric: '#6F6B64', swatch: '#6F6B64' },
+  blanco:       { label: 'blanco',       fabric: '#FFFFFF', swatch: '#FFFFFF' },
   transparente: { label: 'transparente', fabric: 'rgba(241,238,231,.10)', swatch: 'transparent' },
 };
 
 const ADULT = ['S', 'M', 'L', 'XL', 'XXL'];
 const KIDS = ['4', '6', '8', '10', '12'];
+const TEE_SIZES = ['S', 'M', 'L', 'XL']; // según la guía de tallas S–XL
+
+// foto de producto: un mockup con la espalda a la izquierda y el frente a la derecha.
+// fx, fy = centro del estampado de la espalda (fracción de la imagen) para la vista detalle.
+const PH = (id, fx = .3, fy = .3) => ({ src: `assets/productos/${id}.webp`, focus: [fx, fy] });
 
 /* Catálogo de arranque.
-   OJO: nombres y precios son DE EJEMPLO; el usuario los confirma después.
-   img (opcional): ruta a foto propia, o un objeto por color
-   { negro: 'assets/productos/cam-noche-negro.jpg', ... }. Si no hay, se dibuja el SVG. */
+   OJO: los precios (y los nombres de vasos, termos y taza) son DE EJEMPLO; el usuario los confirma.
+   photo (opcional): mockup propio, ver PH(). Si no hay foto, se dibuja el SVG. */
 const PRODUCTS = [
-  { id: 'cam-noche', name: 'camiseta noche', cat: 'camisetas', aud: 'adultos', type: 'tee',
-    line: 'algodón 100 % · logo pecho', desc: 'la camiseta base de zemar. logo en el pecho y logo grande en la espalda.',
-    price: 69900, colors: ['negro', 'hueso', 'piedra'], sizes: ADULT,
-    print: 'logo en el pecho; espalda: logo grande', art: { front: 'logo', back: 'biglogo' }, badge: 'más pedida' },
-  { id: 'cam-senal', name: 'camiseta señal oversize', cat: 'camisetas', aud: 'adultos', type: 'tee',
-    line: 'oversize · ícono pecho', desc: 'corte amplio. ícono pequeño adelante; atrás, el punto naranja de lo que viene.',
-    price: 79900, colors: ['hueso', 'negro'], sizes: ADULT,
-    print: 'ícono pequeño en el pecho; espalda: punto naranja grande + "lo que viene"', art: { front: 'icon', back: 'senal' } },
-  { id: 'cam-yoru', name: 'camiseta yoru 夜', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'yoru · noche', desc: '夜 significa noche. grande al frente, con su lectura en mono.',
-    price: 69900, colors: ['negro', 'piedra'], sizes: ['S', 'M', 'L', 'XL'],
-    print: '夜 grande + "YORU · NOCHE" en mono', art: { front: 'yoru', back: 'neck' }, badge: 'nuevo' },
-  { id: 'cam-sigue', name: 'camiseta lo que sigue', cat: 'camisetas', aud: 'adultos', type: 'tee',
-    line: 'texto pecho', desc: 'para los que ya están pensando en lo que viene.',
-    price: 69900, colors: ['negro', 'hueso'], sizes: ADULT,
-    print: 'texto "lo que sigue···"', art: { front: 'text', back: 'neck' }, text: 'lo que sigue···' },
-  { id: 'cam-pronto', name: 'camiseta pronto (niños)', cat: 'camisetas', aud: 'niños', type: 'tee',
-    line: 'niños · tallas 4 a 12', desc: 'para los más pequeños, que tampoco saben esperar.',
-    price: 49900, colors: ['hueso', 'negro'], sizes: KIDS,
-    print: 'texto "pronto···"', art: { front: 'text', back: 'neck' }, text: 'pronto···' },
-  { id: 'cam-cargando', name: 'camiseta cargando (niños)', cat: 'camisetas', aud: 'niños', type: 'tee',
-    line: 'niños · ícono grande', desc: 'los tres puntos, cargando. tallas 4 a 12.',
-    price: 49900, colors: ['negro', 'hueso'], sizes: KIDS,
-    print: 'ícono de 3 puntos grande', art: { front: 'bigicon', back: 'neck' } },
+  { id: 'cam-mascara', name: 'camiseta máscara de oro', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · espalda', desc: 'máscara de oro precolombina envuelta en espinas, con zemar arriba. frente liso.',
+    price: 69900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: zemar + máscara de oro', photo: PH('cam-mascara', .30, .33), badge: 'nuevo' },
+  { id: 'cam-jaguar', name: 'camiseta jaguar', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · espalda', desc: 'un jaguar descansando sobre zemar. frente liso.',
+    price: 69900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: jaguar sobre zemar', photo: PH('cam-jaguar', .30, .27), badge: 'más pedida' },
+  { id: 'cam-condor-hueso', name: 'camiseta cóndor de hueso', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · espalda', desc: 'un cóndor mitad plumas, mitad hueso, cruzando zemar en dorado. frente liso.',
+    price: 69900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: zemar dorado + cóndor', photo: PH('cam-condor-hueso', .31, .28) },
+  { id: 'cam-goat', name: 'camiseta goat', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · espalda', desc: 'cabra de pelo largo con goat en letras de pelo. frente liso.',
+    price: 69900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: cabra + goat', photo: PH('cam-goat', .31, .32) },
+  { id: 'cam-world-tour', name: 'camiseta world tour', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · espalda', desc: 'mano de esqueleto dorada llena de anillos de campeón. frente liso.',
+    price: 69900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: mano dorada + world tour', photo: PH('cam-world-tour', .29, .33) },
+  { id: 'cam-bulldogs', name: 'camiseta bulldogs', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · pecho y espalda', desc: 'tres bulldogs franceses con cadenas frente a zemar. logo pequeño en el pecho.',
+    price: 69900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: zemar; espalda: zemar + bulldogs', photo: PH('cam-bulldogs', .30, .30) },
+  { id: 'cam-condor-andes', name: 'camiseta cóndor de los andes', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · pecho y espalda', desc: 'un cóndor sobre la montaña con zemar en letra cursiva. firma pequeña en el pecho.',
+    price: 69900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: zemar cursiva; espalda: cóndor', photo: PH('cam-condor-andes', .30, .29) },
+  { id: 'cam-cruces', name: 'camiseta cruces', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    line: 'oversize · pecho y espalda', desc: 'cinco cruces de colores, una con zemar. versión mini en el pecho.',
+    price: 69900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: cruces mini; espalda: cruces', photo: PH('cam-cruces', .30, .27) },
   { id: 'vaso-20', name: 'vaso térmico 20 oz', cat: 'vasos', aud: 'todos', type: 'tumbler',
     line: 'acero · 20 oz', desc: 'mantiene frío o caliente por horas. tapa con pitillo.',
     price: 54900, colors: ['negro', 'hueso'], sizes: [], print: 'ícono (uv o láser)' },
@@ -243,12 +248,38 @@ function productSVG(p, color, view = 'front', cls = '') {
   </svg>`;
 }
 
+/* ---------- fotos de producto ----------
+   el mockup trae la espalda (izquierda) y el frente (derecha); cada vista
+   es un recorte con background-size/position, sin archivos extra. */
+const PHOTO_RATIO = 2000 / 1611; // alto / ancho del mockup
+const PHOTO_VIEW = {
+  back:   { c: (p) => [p.photo.focus[0], .34], z: 2.3 },
+  front:  { c: () => [.72, .34], z: 2.3 },
+  detail: { c: (p) => p.photo.focus, z: 4.2 },
+};
+const clamp01 = (n) => Math.min(1, Math.max(0, n));
+const VIEW_LABEL = { back: 'espalda', front: 'frente', detail: 'detalle del estampado' };
+
+// a = alto / ancho de la caja donde va la foto
+function photoDiv(p, color, view, cls = '', a = 1.25, decorative = false) {
+  const { c, z } = PHOTO_VIEW[view];
+  const [cx, cy] = c(p);
+  const px = clamp01((cx * z - .5) / (z - 1));
+  const py = clamp01((cy * z * PHOTO_RATIO - a / 2) / (z * PHOTO_RATIO - a));
+  const label = `${p.name}, ${COLORS[color].label}, ${VIEW_LABEL[view]}`;
+  const aria = decorative ? 'aria-hidden="true"' : `role="img" aria-label="${esc(label)}"`;
+  const style = `background-image:url('${esc(p.photo.src)}');background-size:${z * 100}% auto;background-position:${(px * 100).toFixed(2)}% ${(py * 100).toFixed(2)}%`;
+  return `<span class="ph ${cls}" ${aria} style="${style}"></span>`;
+}
+
+const mainView = (p) => (p.photo ? 'back' : 'front');
+const viewsOf = (p) => (p.photo
+  ? [['back', 'espalda'], ['front', 'frente'], ['detail', 'detalle']]
+  : [['front', 'frente'], ['back', 'espalda'], ['detail', 'detalle']]);
+
 // usa la foto propia si existe; si no, el SVG
-function productVisual(p, color, view = 'front', cls = '') {
-  const src = p.img && (typeof p.img === 'string' ? p.img : p.img[color]);
-  if (src && view === 'front') {
-    return `<img class="${cls}" src="${esc(src)}" alt="${esc(p.name + ', ' + COLORS[color].label)}" loading="lazy" style="width:100%;height:100%;object-fit:cover">`;
-  }
+function productVisual(p, color, view = mainView(p), cls = '', a = 1.25) {
+  if (p.photo) return photoDiv(p, color, view, cls, a);
   return productSVG(p, color, view, cls);
 }
 
@@ -270,18 +301,21 @@ function renderOpts(container, values, current, { swatch = false, onPick }) {
 /* ==========================================================
    Portada
    ========================================================== */
-const hero = { p: byId('cam-noche'), color: 'negro', size: 'M', view: 'front' };
-const VIEWS = [['front', 'frente'], ['back', 'espalda'], ['detail', 'detalle']];
+const hero = { p: byId('cam-mascara'), color: 'negro', size: 'M' };
+hero.view = mainView(hero.p);
+const VIEWS = viewsOf(hero.p);
 
 function renderHeroStage() {
   $('#heroStage').innerHTML = productVisual(hero.p, hero.color, hero.view, 'stage-svg');
 }
 function renderHeroThumbs() {
   $('#heroThumbs').innerHTML = VIEWS.map(([v, label]) =>
-    `<button type="button" class="thumb" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${productSVG(hero.p, hero.color, v)}</button>`
+    `<button type="button" class="thumb" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${productVisual(hero.p, hero.color, v, '', 4 / 3)}</button>`
   ).join('');
 }
 function initHero() {
+  $('.stage-label .mono').textContent = hero.p.name;
+  $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa`);
   $('#heroPrice').textContent = money(hero.p.price);
   $('#heroChipPrice').textContent = money(hero.p.price);
   renderOpts($('#heroSizes'), hero.p.sizes, hero.size, { onPick: (v) => { hero.size = v; } });
@@ -324,6 +358,7 @@ function matchesQuery(p, q) {
 function renderFilters() {
   $('#filters').innerHTML = FILTERS.map(({ key, label }) => {
     const n = PRODUCTS.filter((p) => matchesFilter(p, key)).length;
+    if (!n && key !== 'todo') return ''; // sin productos (p. ej. niños) no se muestra
     return `<button type="button" class="opt" data-f="${esc(key)}" aria-pressed="${key === filter}">${esc(label)}<span class="n">${n}</span></button>`;
   }).join('');
 }
@@ -335,6 +370,7 @@ function cardHTML(p) {
   return `<article class="card">
     <button type="button" class="card-img" data-id="${p.id}" aria-label="ver ${esc(p.name)}">
       ${productVisual(p, color)}
+      ${p.photo ? photoDiv(p, color, 'front', 'alt', 1.25, true) : ''}
       ${badge}
       <span class="see" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
     </button>
