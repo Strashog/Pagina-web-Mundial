@@ -517,7 +517,7 @@ function orderMessage(items) {
     ...items.map(itemLine),
     `total: ${money(totalOf(items))}`,
     'mi nombre: ',
-    'ciudad: ',
+    'barrio (bogotá): ',
   ].join('\n');
 }
 
