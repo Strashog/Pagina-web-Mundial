@@ -410,8 +410,8 @@ function initCatalog() {
     const b = e.target.closest('.card-img');
     if (b) openSheet(b.dataset.id);
   });
-  // los enlaces del nav también filtran
-  document.querySelectorAll('.nav-links [data-filter]').forEach((a) =>
+  // los enlaces del nav y el botón del drop también filtran
+  document.querySelectorAll('a[data-filter]').forEach((a) =>
     a.addEventListener('click', () => setFilter(a.dataset.filter)));
 }
 
@@ -572,7 +572,7 @@ function initBag() {
    Formspree o Google Forms, basta con reemplazar esta función.
    ========================================================== */
 function submitWaitlist({ nombre, whatsapp, interes }) {
-  const msg = `hola zemar, quiero estar en la lista de espera del drop 01. soy ${nombre} (whatsapp ${whatsapp}), me interesa ${interes}.`;
+  const msg = `hola zemar, quiero estar en la lista de espera del drop 02. soy ${nombre} (whatsapp ${whatsapp}), me interesa ${interes}.`;
   openWhatsApp(msg);
 }
 
