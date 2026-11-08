@@ -283,12 +283,48 @@ function productVisual(p, color, view = mainView(p), cls = '', a = 1.25) {
   return productSVG(p, color, view, cls);
 }
 
+/* ---------- hotspots sobre la foto (espalda) ----------
+   x, y en % de la caja de la foto; left = la burbuja abre hacia la izquierda */
+const HOTSPOTS = [
+  { x: 50, y: 40, text: 'estampado dtf · no se cuartea' },
+  { x: 27, y: 28, text: 'algodón 100 % peinado' },
+  { x: 70, y: 70, text: 'corte oversize · pide tu talla normal', left: true },
+];
+const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+
+function hotspotsHTML(prefix) {
+  return HOTSPOTS.map((h, i) => `<div class="hs${h.left ? ' left' : ''}" style="left:${h.x}%;top:${h.y}%">
+      <button type="button" class="hotspot" aria-expanded="false" aria-controls="${prefix}-${i}" aria-label="${esc(h.text)}">${PLUS}</button>
+      <span class="hs-bubble glass" id="${prefix}-${i}">${esc(h.text)}</span>
+    </div>`).join('');
+}
+
+function closeHotspots(except) {
+  document.querySelectorAll('.hotspot[aria-expanded="true"]').forEach((b) => {
+    if (b !== except) b.setAttribute('aria-expanded', 'false');
+  });
+}
+
+function initHotspots() {
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('.hotspot');
+    closeHotspots(b);
+    if (b) b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true'));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.querySelector('.hotspot[aria-expanded="true"]');
+    if (open) { open.setAttribute('aria-expanded', 'false'); open.focus(); }
+  });
+}
+
 /* ---------- botones de opción ---------- */
 function renderOpts(container, values, current, { swatch = false, onPick }) {
   container.innerHTML = values.map((v) => {
-    const label = swatch ? COLORS[v].label : v;
-    const sw = swatch ? `<span class="sw" style="background:${COLORS[v].swatch}"></span>` : '';
-    return `<button type="button" class="opt" data-v="${esc(v)}" aria-pressed="${v === current}">${sw}${esc(label)}</button>`;
+    if (swatch) {
+      return `<button type="button" class="opt swatch" data-v="${esc(v)}" aria-pressed="${v === current}"><span class="sw" style="background:${COLORS[v].swatch}"></span><span class="sw-name mono">${esc(COLORS[v].label)}</span></button>`;
+    }
+    return `<button type="button" class="opt" data-v="${esc(v)}" aria-pressed="${v === current}">${esc(v)}</button>`;
   }).join('');
   container.onclick = (e) => {
     const b = e.target.closest('.opt');
@@ -305,19 +341,51 @@ const hero = { p: byId('cam-mascara'), color: 'negro', size: 'M' };
 hero.view = mainView(hero.p);
 const VIEWS = viewsOf(hero.p);
 
+const pad2 = (n) => String(n).padStart(2, '0');
+
 function renderHeroStage() {
   $('#heroStage').innerHTML = productVisual(hero.p, hero.color, hero.view, 'stage-svg');
+  // los hotspots están ubicados sobre la espalda de la foto
+  $('#heroStageWrap').classList.toggle('no-hs', !(hero.p.photo && hero.view === 'back'));
 }
 function renderHeroThumbs() {
   $('#heroThumbs').innerHTML = VIEWS.map(([v, label]) =>
     `<button type="button" class="thumb" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${productVisual(hero.p, hero.color, v, '', 4 / 3)}</button>`
   ).join('');
 }
+function renderHeroCapsule() {
+  $('#heroCapsule').innerHTML = VIEWS.map(([v, label], i) =>
+    `<button type="button" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${pad2(i + 1)}</button>`
+  ).join('');
+}
+
+// miniaturas, cápsula 01/02/03 y flechas ‹ › cambian la vista por aquí
+function setHeroView(view) {
+  hero.view = view;
+  const i = VIEWS.findIndex(([v]) => v === view);
+  $('#heroIdx').textContent = pad2(i + 1);
+  $('#heroBar').style.width = `${((i + 1) / VIEWS.length) * 100}%`;
+  document.querySelectorAll('#heroThumbs [data-view], #heroCapsule [data-view]').forEach((b) =>
+    b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+  renderHeroStage();
+}
+function stepHeroView(dir) {
+  const i = VIEWS.findIndex(([v]) => v === hero.view);
+  setHeroView(VIEWS[(i + dir + VIEWS.length) % VIEWS.length][0]);
+}
+
+function askTalla() {
+  openWhatsApp(`hola zemar, tengo una duda con la talla de la ${hero.p.name}`);
+}
+
 function initHero() {
   $('.stage-label .mono').textContent = hero.p.name;
-  $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa`);
+  $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa, ${money(hero.p.price)}`);
   $('#heroPrice').textContent = money(hero.p.price);
   $('#heroChipPrice').textContent = money(hero.p.price);
+  $('#statTees').textContent = PRODUCTS.filter((p) => p.cat === 'camisetas' && p.photo).length;
+  $('#statPrice').textContent = money(hero.p.price);
+  $('#heroHotspots').innerHTML = hotspotsHTML('hhs');
   renderOpts($('#heroSizes'), hero.p.sizes, hero.size, { onPick: (v) => { hero.size = v; } });
   renderOpts($('#heroColors'), hero.p.colors, hero.color, {
     swatch: true,
@@ -325,17 +393,14 @@ function initHero() {
   });
   renderHeroStage();
   renderHeroThumbs();
-  $('#heroThumbs').addEventListener('click', (e) => {
-    const t = e.target.closest('.thumb');
-    if (!t) return;
-    hero.view = t.dataset.view;
-    const i = VIEWS.findIndex(([v]) => v === hero.view);
-    $('#heroIdx').textContent = String(i + 1).padStart(2, '0');
-    $('#heroBar').style.width = `${((i + 1) / VIEWS.length) * 100}%`;
-    $('#heroThumbs').querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-pressed', String(b === t)));
-    renderHeroStage();
-  });
+  renderHeroCapsule();
+  const pick = (e) => { const t = e.target.closest('[data-view]'); if (t) setHeroView(t.dataset.view); };
+  $('#heroThumbs').addEventListener('click', pick);
+  $('#heroCapsule').addEventListener('click', pick);
+  $('#heroPrev').addEventListener('click', () => stepHeroView(-1));
+  $('#heroNext').addEventListener('click', () => stepHeroView(1));
   $('#heroBuy').addEventListener('click', () => addToBag(hero.p.id, hero.color, hero.size, 1));
+  document.querySelectorAll('[data-wa-talla]').forEach((b) => b.addEventListener('click', askTalla));
 }
 
 /* ==========================================================
@@ -368,12 +433,14 @@ function cardHTML(p) {
   const badge = p.badge ? `<span class="badge mono">${esc(p.badge)}</span>` : '';
   const sw = p.colors.map((c) => `<i style="background:${COLORS[c].swatch}" title="${COLORS[c].label}"></i>`).join('');
   return `<article class="card">
-    <button type="button" class="card-img" data-id="${p.id}" aria-label="ver ${esc(p.name)}">
-      ${productVisual(p, color)}
-      ${p.photo ? photoDiv(p, color, 'front', 'alt', 1.25, true) : ''}
-      ${badge}
-      <span class="see" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-    </button>
+    <div class="card-media">
+      <button type="button" class="card-img${p.photo ? ' has-photo' : ''}" data-id="${p.id}" aria-label="ver ${esc(p.name)}">
+        ${productVisual(p, color)}
+        ${p.photo ? photoDiv(p, color, 'front', 'alt', 1.25, true) : ''}
+        ${badge}
+      </button>
+      <button type="button" class="icon-btn light quick-add" data-add="${p.id}" aria-label="añadir ${esc(p.name)} a la bolsa">${PLUS}</button>
+    </div>
     <div class="card-meta">
       <h3>${esc(p.name)}</h3>
       <span class="line mono">${esc(p.line)}</span>
@@ -407,6 +474,8 @@ function initCatalog() {
     if (b) setFilter(b.dataset.f);
   });
   $('#grid').addEventListener('click', (e) => {
+    const add = e.target.closest('.quick-add');
+    if (add) { e.stopPropagation(); quickAdd(add.dataset.add); return; }
     const b = e.target.closest('.card-img');
     if (b) openSheet(b.dataset.id);
   });
@@ -441,15 +510,38 @@ function initSearch() {
    Ficha de producto
    ========================================================== */
 const sheet = { p: null, color: null, size: null, qty: 1 };
+const defaultSize = (p) => (p.sizes.length ? (p.sizes.includes('M') ? 'M' : p.sizes[0]) : null);
+
+/* guía de tallas en cm (ancho de pecho y largo). Pendiente del usuario:
+   cuando estén las medidas, llenar así: { S: [52, 70], M: [55, 72], ... } */
+const SIZE_GUIDE = null;
+
+function renderSizeGuide() {
+  const note = '<p>si dudas entre dos tallas, escríbenos y te ayudamos a elegir.</p>';
+  $('#sizeGuideBody').innerHTML = SIZE_GUIDE
+    ? `<table><thead><tr><th>talla</th><th>ancho</th><th>largo</th></tr></thead><tbody>${
+      Object.entries(SIZE_GUIDE).map(([t, [a, l]]) => `<tr><td>${esc(t)}</td><td>${a} cm</td><td>${l} cm</td></tr>`).join('')
+    }</tbody></table>${note}`
+    : `<p>medidas por confirmar··· pronto aquí.</p>${note}`;
+}
 
 function renderSheetImg() {
-  $('#sheetImg').innerHTML = productVisual(sheet.p, sheet.color);
+  const el = $('#sheetImg');
+  el.classList.toggle('has-photo', !!sheet.p.photo);
+  el.innerHTML = productVisual(sheet.p, sheet.color)
+    + (sheet.p.photo ? `<div class="hotspots">${hotspotsHTML('shs')}</div>` : '');
+}
+
+// el "+" de la tarjeta: talla M (o la primera) y el primer color
+function quickAdd(id) {
+  const p = byId(id);
+  if (p) addToBag(p.id, p.colors[0], defaultSize(p), 1);
 }
 
 function openSheet(id) {
   const p = byId(id);
   if (!p) return;
-  Object.assign(sheet, { p, color: p.colors[0], size: p.sizes.length ? (p.sizes.includes('M') ? 'M' : p.sizes[0]) : null, qty: 1 });
+  Object.assign(sheet, { p, color: p.colors[0], size: defaultSize(p), qty: 1 });
   $('#sheetLine').textContent = p.line;
   $('#sheetTitle').textContent = p.name;
   $('#sheetDesc').textContent = p.desc;
@@ -458,8 +550,9 @@ function openSheet(id) {
   renderSheetImg();
   renderOpts($('#sheetColors'), p.colors, sheet.color, { swatch: true, onPick: (v) => { sheet.color = v; renderSheetImg(); } });
   const hasSizes = p.sizes.length > 0;
-  $('#sheetSizesLabel').hidden = !hasSizes;
-  $('#sheetSizes').hidden = !hasSizes;
+  $('#sheetSizesPick').hidden = !hasSizes;
+  $('#sizeGuide').hidden = !hasSizes;
+  $('#sizeGuide').open = false;
   if (hasSizes) renderOpts($('#sheetSizes'), p.sizes, sheet.size, { onPick: (v) => { sheet.size = v; } });
   $('#sheet').showModal();
 }
@@ -603,10 +696,93 @@ function toast(text) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+/* ==========================================================
+   Nav: píldora compacta al hacer scroll, sección activa,
+   menú de celular y botón "pedir"
+   ========================================================== */
+const hasIO = 'IntersectionObserver' in window;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function initNav() {
+  const nav = $('#nav');
+  if (hasIO) {
+    // centinela a 120 px del borde de arriba del hero
+    const s = document.createElement('div');
+    s.style.cssText = 'position:absolute;top:120px;left:0;width:1px;height:1px;pointer-events:none';
+    $('.hero').appendChild(s);
+    new IntersectionObserver(([en]) => {
+      nav.classList.toggle('compact', !en.isIntersecting && en.boundingClientRect.top < 0);
+    }).observe(s);
+
+    // la sección que cruza la mitad de la pantalla marca su enlace
+    const links = document.querySelectorAll('.nav-links [data-section]');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        links.forEach((a) => a.setAttribute('aria-current', String(a.dataset.section === en.target.id)));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ['inicio', 'catalogo', 'lista'].forEach((id) => spy.observe(document.getElementById(id)));
+  }
+
+  $('#navOrder').addEventListener('click', () => setBagOpen(true));
+
+  const menu = $('#menu'), menuBtn = $('#menuBtn');
+  menuBtn.addEventListener('click', () => { menu.showModal(); menuBtn.setAttribute('aria-expanded', 'true'); });
+  menu.addEventListener('close', () => menuBtn.setAttribute('aria-expanded', 'false'));
+  $('#menuClose').addEventListener('click', () => menu.close());
+  menu.addEventListener('click', (e) => {
+    if (e.target === menu || e.target.closest('a')) menu.close(); // clic afuera o en un enlace
+  });
+}
+
+/* ---------- movimiento (15.5): aparición al hacer scroll y parallax ---------- */
+function initMotion() {
+  if (reduceMotion) return;
+
+  if (hasIO) {
+    // el estado inicial es visible: .reveal solo se agrega si hay observador
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.benefit, .cat-head, .filters, .wait .wrap > *, .closing .wrap > *').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight) return; // lo que ya se ve no se esconde
+      el.classList.add('reveal');
+      io.observe(el);
+    });
+  }
+
+  // parallax suave de "zem · ar" con el mouse (máximo 12 px, solo escritorio)
+  if (window.matchMedia('(hover: hover) and (min-width: 900px)').matches) {
+    const panel = $('.hero-panel'), giant = $('#giant');
+    let raf = 0;
+    panel.addEventListener('mousemove', (e) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = panel.getBoundingClientRect();
+        const dx = ((e.clientX - r.left) / r.width - .5) * -24;
+        const dy = ((e.clientY - r.top) / r.height - .5) * -12;
+        giant.style.setProperty('--px', `${dx.toFixed(1)}px`);
+        giant.style.setProperty('--py', `${dy.toFixed(1)}px`);
+      });
+    });
+    panel.addEventListener('mouseleave', () => {
+      giant.style.setProperty('--px', '0px');
+      giant.style.setProperty('--py', '0px');
+    });
+  }
+}
+
 /* ---------- arranque ---------- */
 initHero();
+initHotspots();
 initCatalog();
 initSearch();
 initSheet();
+renderSizeGuide();
 initBag();
 initWaitlist();
+initNav();
+initMotion();

@@ -18,95 +18,147 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="frame">
 
-  <!-- Filtro de aerosol compartido por todos los .spray -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <defs>
-      <filter id="aerosol" x="-10%" y="-30%" width="120%" height="160%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="7" result="ruido"/>
-        <feDisplacementMap in="SourceGraphic" in2="ruido" scale="18" xChannelSelector="R" yChannelSelector="G" result="corrido"/>
-        <feGaussianBlur in="corrido" stdDeviation="2.6"/>
-      </filter>
-    </defs>
-  </svg>
+  <!-- ========== B. Hero (con la nav flotando arriba) ========== -->
+  <section class="hero" id="inicio" aria-labelledby="heroTitle">
 
-  <!-- ========== Barra superior ========== -->
-  <header class="nav">
-    <div class="wrap">
-      <a href="#inicio" class="logo live" aria-label="zemar, ir al inicio">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
+    <!-- A. Nav -->
+    <header class="nav" id="nav">
+      <a href="#inicio" class="logo nav-logo" aria-label="zemar, ir al inicio">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
       <ul class="nav-links">
-        <li><a href="#catalogo" data-filter="todo">catálogo</a></li>
+        <li><a href="#inicio" data-section="inicio" aria-current="true">inicio</a></li>
+        <li><a href="#catalogo" data-section="catalogo" data-filter="todo">catálogo</a></li>
         <li><a href="#catalogo" data-filter="camisetas">camisetas</a></li>
-        <li><a href="#catalogo" data-filter="vasos">vasos y termos</a></li>
-        <li><a href="#drop" data-filter="todo">drop 01</a></li>
-        <li><a href="#lista">lista de espera</a></li>
+        <li><a href="#lista" data-section="lista">lista de espera</a></li>
       </ul>
       <div class="nav-tools">
-        <button class="icon-btn" id="searchBtn" type="button" aria-label="buscar en el catálogo" aria-expanded="false" aria-controls="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <button class="icon-btn light" id="searchBtn" type="button" aria-label="buscar en el catálogo" aria-expanded="false" aria-controls="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
         </button>
-        <button class="icon-btn" id="bagBtn" type="button" aria-label="abrir bolsa" aria-controls="bag">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <button class="icon-btn light" id="bagBtn" type="button" aria-label="abrir bolsa" aria-controls="bag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
           <span class="bag-count" id="bagCount" aria-hidden="true">0</span>
         </button>
+        <button class="btn btn-arrow pedir" id="navOrder" type="button">pedir
+          <span class="arrow go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </button>
+        <button class="icon-btn light menu-btn" id="menuBtn" type="button" aria-label="abrir menú" aria-controls="menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9h16M4 15h16"/></svg>
+        </button>
       </div>
-    </div>
-    <div class="search" id="search">
-      <div class="wrap">
-        <label class="mono muted" for="searchInput">buscar</label>
-        <input id="searchInput" type="search" placeholder="camiseta, vaso, niños···" autocomplete="off" tabindex="-1">
+      <div class="search" id="search">
+        <label class="sr-only" for="searchInput">buscar en el catálogo</label>
+        <input id="searchInput" type="search" placeholder="camiseta, jaguar, vaso···" autocomplete="off" tabindex="-1">
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main id="inicio">
+    <div class="hero-panel">
+      <div class="notch top">
+        <a href="#inicio" class="logo live" aria-label="zemar, inicio">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
+      </div>
 
-    <!-- ========== Portada ========== -->
-    <section class="hero" aria-labelledby="heroTitle">
-      <svg class="spray" viewBox="0 0 1200 420" aria-hidden="true">
-        <text x="600" y="330" text-anchor="middle" font-size="390" fill="#6F6B64" opacity=".2" filter="url(#aerosol)">zemar</text>
-      </svg>
-      <div class="wrap">
-        <div class="hero-copy">
-          <div class="hero-tags mono"><span class="br">ya disponible</span><span class="br">2026</span></div>
-          <h1 id="heroTitle">drop 01<sup>™</sup></h1>
+      <!-- palabra gigante partida alrededor de la camiseta -->
+      <div class="giant" id="giant" aria-hidden="true">
+        <span class="word l">zem</span>
+        <span class="over">drop 01</span>
+        <span class="word r">ar</span>
+      </div>
 
-          <div class="pick">
-            <span class="mono">talla</span>
-            <div class="opts" id="heroSizes" role="group" aria-label="talla"></div>
-            <span class="mono">color</span>
-            <div class="opts" id="heroColors" role="group" aria-label="color"></div>
-          </div>
+      <div class="hero-head">
+        <span class="pill"><span class="dot"></span>ya disponible</span>
+        <h1 id="heroTitle">drop 01.<span class="tono">ocho camisetas.</span></h1>
+        <p class="hero-lead">algodón 100 %, estampado dtf, corte oversize. envíos en bogotá, pedidos por whatsapp.</p>
+      </div>
 
-          <div class="buy">
-            <button class="buy-btn" id="heroBuy" type="button" aria-label="añadir camiseta máscara de oro a la bolsa">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
-            </button>
-            <div class="buy-text">
-              <span class="mono muted">añadir a la bolsa</span>
-              <span class="price" id="heroPrice">$44.900</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-stage">
+      <div class="hero-stage" id="heroStageWrap">
+        <div class="stage-box">
           <div id="heroStage"></div>
-          <div class="stage-label">
-            <span class="mono muted">camiseta máscara de oro</span>
+          <div class="hotspots" id="heroHotspots"></div>
+          <div class="stage-label glass">
+            <span class="mono">camiseta máscara de oro</span>
             <span class="price" id="heroChipPrice">$44.900</span>
           </div>
         </div>
+      </div>
 
-        <aside class="hero-side" aria-label="vistas de la camiseta">
+      <div class="hero-side">
+        <div class="colors">
+          <span class="mono">elige el color</span>
+          <div class="opts swatches-pick" id="heroColors" role="group" aria-label="color"></div>
+        </div>
+        <div class="capsule glass" id="heroCapsule" role="group" aria-label="vista"></div>
+      </div>
+
+      <div class="hero-buy">
+        <div class="pick-row">
+          <span class="mono">talla</span>
+          <div class="opts" id="heroSizes" role="group" aria-label="talla"></div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn go btn-arrow" id="heroBuy" type="button" aria-label="añadir camiseta máscara de oro a la bolsa">añadir · <span id="heroPrice">$44.900</span>
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </button>
+          <a class="btn glass btn-arrow" href="#catalogo" data-filter="camisetas">ver el drop
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </a>
+        </div>
+      </div>
+
+      <button class="icon-btn side-arrow prev" id="heroPrev" type="button" aria-label="vista anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+      <button class="icon-btn side-arrow next" id="heroNext" type="button" aria-label="vista siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+
+      <div class="hero-bottom">
+        <div class="views-card glass">
           <div class="thumbs" id="heroThumbs" role="group" aria-label="vista"></div>
-          <div class="counter mono"><span id="heroIdx">01</span><span class="bar"><span id="heroBar" style="width:33.33%"></span></span><span>03</span></div>
-          <p class="side-note">algodón 100 %, estampado dtf. por ahora envíos solo en bogotá; pronto a toda colombia. pedidos por whatsapp.</p>
-          <span class="mono muted br">desliza para ver</span>
+          <div class="views-meta">
+            <span class="mono">3 vistas</span>
+            <div class="counter mono"><span id="heroIdx">01</span><span class="bar"><span id="heroBar" style="width:33.33%"></span></span><span>03</span></div>
+          </div>
+        </div>
+
+        <div class="stats glass" role="list" aria-label="el drop en cifras">
+          <div class="stat" role="listitem">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4 3.5 6.5 5.5 10.5 7 9.8V20h10V9.8l1.5.7 2-4L16 4a4 4 0 0 1-8 0Z"/></svg></span>
+            <div><b id="statTees">8</b><span class="mono">camisetas</span></div>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 12.5V4h8.5l8.5 8.5-8 8-9-8Z"/><circle cx="8" cy="8.5" r="1.5"/></svg></span>
+            <div><b class="drop" id="statPrice">$44.900</b><span class="mono">c/u</span></div>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+            <div><b>bogotá</b><span class="mono">envíos</span></div>
+          </div>
+          <div class="stat" role="listitem">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H8L4 19Z"/></svg></span>
+            <div><b>whatsapp</b><span class="mono">pedidos</span></div>
+          </div>
+        </div>
+
+        <aside class="wa-card" aria-labelledby="waTitle">
+          <h3 id="waTitle">¿dudas con la talla?</h3>
+          <p>escríbenos y te ayudamos a elegir.</p>
+          <button class="btn dark btn-arrow" type="button" data-wa-talla>escribir
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </button>
         </aside>
       </div>
-    </section>
 
-    <!-- ========== Cinta ========== -->
+      <div class="notch bottom">
+        <a href="#beneficios" aria-label="bajar a los beneficios">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14m-6-6 6 6 6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <!-- ========== C. Cinta ========== -->
     <div class="ticker mono" aria-label="drop 01 ya disponible. algo viene: drop 02, fecha por anunciar. envíos en bogotá, pronto a toda colombia. pedidos por whatsapp. para niños, jóvenes y adultos.">
       <div class="ticker-track" aria-hidden="true">
         <span><b>DROP 01</b> · YA DISPONIBLE · algo viene··· · <b>DROP 02</b> · <b>FECHA POR ANUNCIAR</b> · ENVÍOS EN BOGOTÁ · PRONTO A TODA COLOMBIA · PEDIDOS POR WHATSAPP · NIÑOS · JÓVENES · ADULTOS ·</span>
@@ -114,50 +166,62 @@
       </div>
     </div>
 
-    <!-- ========== Catálogo ========== -->
+    <!-- ========== D. Beneficios ========== -->
+    <section class="benefits" id="beneficios" aria-label="lo que tiene cada camiseta">
+      <div class="wrap">
+        <div class="benefit">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7.5"/><path d="M6 9.5c3.5 1.4 8.5 1.4 12 0M6 14.5c3.5-1.4 8.5-1.4 12 0M12 4.5c-2 4.5-2 10.5 0 15"/></svg></span>
+          <div><h3>algodón 100 %</h3><span class="mono">se siente</span></div>
+        </div>
+        <div class="benefit">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.5s6 6.4 6 10.8a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5Z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg></span>
+          <div><h3>estampado dtf</h3><span class="mono">no se cuartea</span></div>
+        </div>
+        <div class="benefit">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4 3.5 6.5 5.5 10.5 7 9.8V20h10V9.8l1.5.7 2-4L16 4a4 4 0 0 1-8 0Z"/></svg></span>
+          <div><h3>oversize</h3><span class="mono">corte amplio</span></div>
+        </div>
+        <div class="benefit">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+          <div><h3>envíos en bogotá</h3><span class="mono">pronto a toda colombia</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== E. Catálogo ========== -->
     <section class="catalog" id="catalogo" aria-labelledby="catTitle">
       <div class="wrap">
         <div class="cat-head">
           <h2 id="catTitle">catálogo</h2>
-          <div class="stack mono">
-            <span class="br">colección de arranque</span>
-            <span class="br" id="catCount">12 productos</span>
-          </div>
-          <div class="stack mono">
-            <span>algodón 100 %</span>
-            <span>estampado dtf</span>
-            <span>tallas s a xl</span>
-          </div>
+          <span class="pill" id="catCount">12 productos</span>
+          <span class="spec mono">algodón 100 % · estampado dtf · tallas s a xl</span>
         </div>
 
         <div class="filters" id="filters" role="group" aria-label="filtrar catálogo"></div>
 
         <div class="grid" id="grid">
+          <!-- DROP 02: lo que sigue (estilo ref-8) -->
           <article class="feature" id="drop" aria-labelledby="dropTitle">
-            <svg class="spray" viewBox="0 0 900 300" aria-hidden="true">
-              <text x="450" y="240" text-anchor="middle" font-size="250" fill="#6F6B64" opacity=".28" filter="url(#aerosol)">drop 01</text>
-            </svg>
-            <div class="feature-top mono"><span class="br">drop 01</span><span class="br">ya disponible</span></div>
-            <div>
-              <h3 id="dropTitle">drop 01</h3>
-            </div>
-            <p>el primer drop propio ya está aquí: 8 camisetas oversize. el que sigue, todavía no lo ves···</p>
-            <div class="row">
-              <a class="btn" href="#catalogo" data-filter="camisetas">ver el drop</a>
-              <span class="date-chip mono">desde $44.900</span>
-            </div>
+            <span class="ghost-word" aria-hidden="true">pronto</span>
+            <span class="pill"><span class="dot go"></span>drop 02</span>
+            <h3 id="dropTitle">lo que sigue···</h3>
+            <p>todavía no lo ves. déjanos tu whatsapp y te avisamos primero.</p>
+            <a class="btn dark btn-arrow" href="#lista">avísame
+              <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            </a>
           </article>
           <!-- las tarjetas de producto se pintan desde PRODUCTS en script.js -->
         </div>
       </div>
     </section>
 
-    <!-- ========== Lista de espera ========== -->
+    <!-- ========== H. Lista de espera ========== -->
     <section class="wait" id="lista" aria-labelledby="waitTitle">
+      <div class="notch top"><span class="pill"><span class="dot go"></span>drop 02</span></div>
       <div class="wrap">
         <div>
-          <span class="logo live" style="font-size:2.4rem" aria-hidden="true">zemar<span class="dots"><i></i><i></i><i></i></span></span>
-          <h2 id="waitTitle" style="margin-top:28px">sé el primero en saber.</h2>
+          <span class="logo live" aria-hidden="true">zemar<span class="dots"><i></i><i></i><i></i></span></span>
+          <h2 id="waitTitle">sé el primero en saber.</h2>
           <p>el drop 01 ya salió. el drop 02 todavía no tiene fecha: déjanos tus datos y te escribimos antes que a nadie.</p>
         </div>
         <form id="waitForm" novalidate>
@@ -177,99 +241,140 @@
               <option value="todo" selected>todo</option>
             </select>
           </div>
-          <button class="btn" type="submit">avísame</button>
+          <button class="btn dark btn-arrow" type="submit">avísame
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </button>
           <p class="form-note mono" id="waitNote">al enviar aceptas el tratamiento de tus datos según nuestro <a href="privacidad.html">aviso de privacidad</a> (ley 1581 de 2012).</p>
         </form>
       </div>
     </section>
 
-    <!-- ========== Cierre ========== -->
+    <!-- ========== I. Cierre ========== -->
     <section class="closing" aria-labelledby="closeTitle">
-      <svg class="spray" viewBox="0 0 1200 420" aria-hidden="true">
-        <text x="600" y="330" text-anchor="middle" font-size="400" fill="#6F6B64" opacity=".24" filter="url(#aerosol)">zemar</text>
-      </svg>
+      <span class="solid-word" aria-hidden="true">zemar</span>
       <div class="wrap">
         <div class="closing-mid">
           <p>zemar sale de ramírez, reordenado. no nació como tendencia, nació como una forma de esperar.</p>
           <p>para los que esperan por vestir lo mejor.</p>
         </div>
         <h2 id="closeTitle">lo esperaste.<br><em>ya llegó.</em><br>y viene más<span class="o">.</span></h2>
-
-        <footer class="foot">
-          <a href="#inicio" class="logo" aria-label="zemar, volver arriba">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
-          <div style="display:grid;gap:14px;justify-items:center">
-            <ul class="mono">
-              <!-- usuarios de redes pendientes de confirmar -->
-              <li><a href="https://www.instagram.com/zemar" target="_blank" rel="noopener">instagram</a></li>
-              <li><a href="https://www.tiktok.com/@zemar" target="_blank" rel="noopener">tiktok</a></li>
-              <li><a href="https://wa.me/573228913539" id="footWa" target="_blank" rel="noopener">whatsapp</a></li>
-              <li><a href="envios.html">envíos</a></li>
-              <li><a href="envios.html#cambios">cambios y devoluciones</a></li>
-              <li><a href="privacidad.html">privacidad</a></li>
-            </ul>
-            <span class="mono">© 2026 ZEMAR · Bogotá, Colombia</span>
-          </div>
-          <div class="tag-code">
-            <span class="barcode" aria-hidden="true"></span>
-            <span class="mono">ZMR · DROP 02 · BOG</span>
-          </div>
-        </footer>
       </div>
     </section>
   </main>
 
-  <!-- ========== Ficha de producto ========== -->
-  <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
-    <button class="sheet-close icon-btn" type="button" id="sheetClose" aria-label="cerrar ficha">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-    </button>
-    <div class="sheet-in">
-      <div class="sheet-img" id="sheetImg"></div>
-      <div class="sheet-body">
-        <div style="display:grid;gap:10px">
-          <span class="mono muted" id="sheetLine"></span>
-          <h3 id="sheetTitle"></h3>
-          <p class="desc" id="sheetDesc"></p>
-          <span class="price" id="sheetPrice"></span>
-        </div>
-        <div class="pick">
-          <span class="mono">color</span>
-          <div class="opts" id="sheetColors" role="group" aria-label="color"></div>
-          <span class="mono" id="sheetSizesLabel">talla</span>
-          <div class="opts" id="sheetSizes" role="group" aria-label="talla"></div>
-          <span class="mono">cantidad</span>
-          <div class="qty">
-            <button type="button" id="qtyMinus" aria-label="quitar uno">−</button>
-            <output id="qtyOut" aria-live="polite">1</output>
-            <button type="button" id="qtyPlus" aria-label="agregar uno">+</button>
-          </div>
-        </div>
-        <div class="sheet-actions">
-          <button class="btn" type="button" id="sheetAdd">añadir a la bolsa</button>
-          <button class="btn go" type="button" id="sheetOrder">pedir ya por whatsapp</button>
-        </div>
+  <footer class="foot">
+    <a href="#inicio" class="logo" aria-label="zemar, volver arriba">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
+    <div class="foot-mid">
+      <ul class="mono">
+        <li><a href="envios.html">envíos</a></li>
+        <li><a href="envios.html#cambios">cambios y devoluciones</a></li>
+        <li><a href="privacidad.html">privacidad</a></li>
+      </ul>
+      <span class="mono">© 2026 ZEMAR · Bogotá, Colombia</span>
+    </div>
+    <div class="foot-right">
+      <!-- usuarios de redes pendientes de confirmar -->
+      <div class="socials">
+        <a class="icon-btn" href="https://www.instagram.com/zemar" target="_blank" rel="noopener" aria-label="instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8.5h3.2L9 6h6l1.8 2.5H20V19H4Z"/><circle cx="12" cy="13.2" r="3.4"/></svg>
+        </a>
+        <a class="icon-btn" href="https://www.tiktok.com/@zemar" target="_blank" rel="noopener" aria-label="tiktok">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 18V6.5l10-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+        </a>
+        <a class="icon-btn" href="https://wa.me/573228913539" id="footWa" target="_blank" rel="noopener" aria-label="whatsapp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H8L4 19Z"/></svg>
+        </a>
+      </div>
+      <div class="tag-code">
+        <span class="barcode" aria-hidden="true"></span>
+        <span class="mono">ZMR · DROP 02 · BOG</span>
       </div>
     </div>
-  </dialog>
+  </footer>
+</div>
 
-  <!-- ========== Bolsa ========== -->
-  <div class="bag-shade" id="bagShade"></div>
-  <aside class="bag" id="bag" aria-labelledby="bagTitle" aria-hidden="true" inert>
-    <div class="bag-head">
-      <h3 id="bagTitle">tu bolsa</h3>
-      <button class="icon-btn" type="button" id="bagClose" aria-label="cerrar bolsa">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
+<!-- ========== F. Ficha de producto ========== -->
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <div class="grab" aria-hidden="true"></div>
+  <button class="sheet-close icon-btn" type="button" id="sheetClose" aria-label="cerrar ficha">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <div class="sheet-in">
+    <div class="sheet-img" id="sheetImg"></div>
+    <div class="sheet-body">
+      <div style="display:grid;gap:10px">
+        <span class="mono muted" id="sheetLine"></span>
+        <h3 id="sheetTitle"></h3>
+        <p class="desc" id="sheetDesc"></p>
+        <span class="price" id="sheetPrice"></span>
+      </div>
+      <div class="pick">
+        <span class="mono">color</span>
+        <div class="opts swatches-pick" id="sheetColors" role="group" aria-label="color"></div>
+      </div>
+      <div class="pick" id="sheetSizesPick">
+        <span class="mono" id="sheetSizesLabel">talla</span>
+        <div class="opts" id="sheetSizes" role="group" aria-label="talla"></div>
+      </div>
+      <div class="pick">
+        <span class="mono">cantidad</span>
+        <div class="qty">
+          <button type="button" id="qtyMinus" aria-label="quitar uno">−</button>
+          <output id="qtyOut" aria-live="polite">1</output>
+          <button type="button" id="qtyPlus" aria-label="agregar uno">+</button>
+        </div>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn" type="button" id="sheetAdd">añadir a la bolsa</button>
+        <button class="btn go btn-arrow" type="button" id="sheetOrder">pedir ya
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </button>
+      </div>
+      <details class="size-guide" id="sizeGuide">
+        <summary class="mono">guía de tallas</summary>
+        <div id="sizeGuideBody"></div>
+      </details>
     </div>
-    <ul class="bag-list" id="bagList"></ul>
-    <div class="bag-foot">
-      <div class="bag-total"><span class="mono muted">total</span><span class="price" id="bagTotal">$0</span></div>
-      <button class="btn go" type="button" id="bagOrder">pedir por whatsapp</button>
-    </div>
-  </aside>
+  </div>
+</dialog>
 
-  <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+<!-- ========== G. Bolsa ========== -->
+<div class="bag-shade" id="bagShade"></div>
+<aside class="bag" id="bag" aria-labelledby="bagTitle" aria-hidden="true" inert>
+  <div class="bag-head">
+    <h3 id="bagTitle">tu bolsa</h3>
+    <button class="icon-btn" type="button" id="bagClose" aria-label="cerrar bolsa">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <ul class="bag-list" id="bagList"></ul>
+  <div class="bag-foot">
+    <div class="bag-total"><span class="mono muted">total</span><span class="price" id="bagTotal">$0</span></div>
+    <button class="btn go btn-arrow" type="button" id="bagOrder">pedir por whatsapp
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+    </button>
+  </div>
+</aside>
 
-  <script src="script.js"></script>
+<!-- ========== Menú en celular ========== -->
+<dialog class="menu-sheet" id="menu" aria-label="menú">
+  <div class="grab" aria-hidden="true"></div>
+  <ul>
+    <li><a href="#inicio">inicio</a></li>
+    <li><a href="#catalogo" data-filter="todo">catálogo</a></li>
+    <li><a href="#catalogo" data-filter="camisetas">camisetas</a></li>
+    <li><a href="#catalogo" data-filter="vasos">vasos y termos</a></li>
+    <li><a href="#lista">lista de espera</a></li>
+  </ul>
+  <button class="btn ghost" type="button" id="menuClose">cerrar</button>
+</dialog>
+
+<button class="wa-fab" type="button" data-wa-talla aria-label="escríbenos por whatsapp">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H8L4 19Z"/></svg>
+</button>
+
+<div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
