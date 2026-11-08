@@ -560,13 +560,13 @@ h1, h2, h3, h4, p { margin: 0; }
 .hero-head { grid-area: head; position: relative; z-index: 3; display: grid; gap: 14px; align-content: start; padding-top: 18px; }
 .hero-head .pill { justify-self: start; }
 .hero h1 {
-  font-size: clamp(2.2rem, 3.6vw, 3.7rem);
+  font-size: clamp(2.2rem, 3.3vw, 3.7rem);
   font-weight: 700;
   line-height: .92;
   letter-spacing: -0.05em;
 }
-.hero h1 .tono { display: block; color: rgba(241, 238, 231, .55); }
-.hero-lead { max-width: 34ch; color: rgba(241, 238, 231, .82); }
+.hero h1 .tono { display: block; color: rgba(241, 238, 231, .55); white-space: nowrap; }
+.hero-lead { max-width: 46ch; color: rgba(241, 238, 231, .82); }
 
 .hero-buy { grid-area: buy; position: relative; z-index: 3; display: grid; gap: 14px; align-content: start; padding-top: 18px; }
 .hero-buy .pick-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -846,6 +846,18 @@ h1, h2, h3, h4, p { margin: 0; }
 .feature p { max-width: 32ch; color: #4A4742; }
 .feature .btn { justify-self: start; }
 
+.also-cut {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 5px 10px;
+  border: 1px solid var(--vidrio-borde);
+  border-radius: var(--r-pill);
+  background: var(--vidrio-oscuro);
+  color: var(--hueso);
+  font-size: 10px;
+}
+
 .empty { grid-column: 1 / -1; padding: 48px 0; text-align: center; color: var(--piedra-2); }
 
 /* ==========================================================
@@ -1050,7 +1062,12 @@ dialog.sheet[open] { animation: aparece .35s var(--ease); }
 .foot ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .foot ul a { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border: 1px solid var(--linea); border-radius: var(--r-pill); text-decoration: none; transition: color .2s, border-color .2s; }
 .foot ul a:hover { color: var(--hueso); border-color: var(--hueso); }
-.foot-right { display: flex; align-items: center; gap: 14px; }
+.foot-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.foot-mail { font-size: var(--t-sm); user-select: text; }
+.foot-handle { font-size: var(--t-sm); }
+.foot .foot-mail:hover, .foot .foot-handle:hover { color: var(--hueso); }
+.menu-socials { justify-content: center; margin-bottom: 14px; }
+.icon-btn svg[fill="currentColor"] { width: 19px; height: 19px; }
 .socials { display: flex; gap: 6px; }
 .socials .icon-btn { width: 40px; height: 40px; }
 .tag-code { display: grid; gap: 4px; justify-items: end; }
@@ -1146,13 +1163,17 @@ dialog.menu-sheet[open] { animation: hoja .35s var(--ease); }
   .tag-code { justify-items: center; }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1340px) {
   .nav-links, .nav-tools .pedir { display: none; }
   .menu-btn { display: grid; }
   .nav-logo { display: inline-flex; }
   .hero .notch.top { display: none; }
   .nav { top: 16px; left: 16px; right: 16px; }
   .nav.compact { width: calc(100% - 24px); }
+}
+
+@media (max-width: 1000px) {
+  .hero h1 .tono { white-space: normal; }
 }
 
 @media (max-width: 760px) {
@@ -1171,7 +1192,7 @@ dialog.menu-sheet[open] { animation: hoja .35s var(--ease); }
   .giant { margin-inline: -18px; font-size: 26.5vw; }
   .hero-stage { grid-area: stage; align-self: auto; max-width: 340px; margin-top: -7vw; }
   .hero-head { padding-top: 0; gap: 14px; }
-  .hero h1 { font-size: clamp(2.3rem, 11vw, 3.2rem); }
+  .hero h1 { font-size: clamp(1.9rem, 8.9vw, 3.2rem); }
   .hero-side { justify-items: start; padding-top: 0; }
   .hero-side .colors { justify-items: start; }
   .capsule { display: none; }

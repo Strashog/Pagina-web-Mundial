@@ -5,6 +5,10 @@
    ========================================================== */
 
 const WHATSAPP = '573228913539';
+const INSTAGRAM = 'https://www.instagram.com/zemarcolombia/';
+const TIKTOK = 'https://www.tiktok.com/@zemar658';
+const EMAIL = 'zemarcolombia@gmail.com';
+const PRECIO_CAMISETA = 49900; // precio único: hombre, mujer clásica, mujer corta y niño
 const BAG_KEY = 'zemar-bolsa';
 
 const NARANJA = '#FF5B1F';
@@ -14,86 +18,114 @@ const COLORS = {
   piedra:       { label: 'piedra',       fabric: '#6F6B64', swatch: '#6F6B64' },
   blanco:       { label: 'blanco',       fabric: '#FFFFFF', swatch: '#FFFFFF' },
   gris:         { label: 'gris',         fabric: '#3A383A', swatch: '#3A383A' },
-  cafe:         { label: 'café',         fabric: '#4A3326', swatch: '#4A3326' },
+  cafe:         { label: 'café',         fabric: '#3E2A21', swatch: '#3E2A21' },
   azul:         { label: 'azul rey',     fabric: '#1F4689', swatch: '#1F4689' },
   vinotinto:    { label: 'vinotinto',    fabric: '#601927', swatch: '#601927' },
   rosado:       { label: 'rosado',       fabric: '#E9B4C3', swatch: '#E9B4C3' },
+  beige:        { label: 'beige',        fabric: '#E0BCA4', swatch: '#E0BCA4' },
   transparente: { label: 'transparente', fabric: 'rgba(241,238,231,.10)', swatch: 'transparent' },
 };
 
 const TEE_SIZES = ['S', 'M', 'L', 'XL'];  // hombre
-const DAMA_SIZES = ['S', 'M', 'XL'];      // mujer (confirmar si hay L)
+const DAMA_SIZES = ['S', 'M', 'XL'];      // mujer, corte clásico (confirmar si hay L)
+const NINO_SIZES = ['2-4', '6-8', '10-12', '14-16'];
+
+// mujer: el mismo diseño en dos cortes, cada uno con su foto y sus tallas
+const CUTS = { clasica: 'clásica', corta: 'corta' };
+const DAMA_CUTS = ['clasica', 'corta'];
+const DAMA_BY_CUT = { clasica: DAMA_SIZES, corta: ['S-M', 'L-XL'] };
 
 // foto de producto: un mockup por color, espalda a la izquierda y frente a la derecha.
-const IMG = (id, color) => `assets/productos/${id}-${color}.webp`;
+const IMG = (id, color, cut) => `assets/productos/${id}-${color}${cut === 'corta' ? '-corta' : ''}.webp`;
 
 /* side = dónde está el estampado ('back' en hombre, 'front' en mujer); es la vista principal.
    focus = centro del estampado (fracción de la imagen), para la vista detalle.
-   Precios: hombre $44.900 (confirmado). mujer $44.900 = DE EJEMPLO, el usuario lo confirma.
+   crop.y (opcional) = altura del recorte de espalda y frente, para maniquíes más pequeños.
+   Las camisetas usan PRECIO_CAMISETA (confirmado por el usuario).
    Vasos, termo y taza: fuera de la página con activo: false (nombres y precios de ejemplo). */
 const PRODUCTS = [
   // ---------- hombre: la protagonista y las nuevas ----------
   { id: 'cam-condor-andes', name: 'camiseta cóndor de los andes', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .29], zoom: 3.5,
     line: 'oversize · pecho y espalda', desc: 'un cóndor sobre la montaña con zemar en letra cursiva. firma pequeña en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true, badge: 'más vendida' },
+    price: PRECIO_CAMISETA, colors: ['blanco'], sizes: TEE_SIZES, photo: true, badge: 'más vendida' },
   { id: 'cam-algo-viene', name: 'camiseta algo viene', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27], zoom: 3,
     line: 'oversize · espalda', desc: 'zemar en cursiva que cruza toda la espalda, con algo viene debajo. frente liso.',
-    price: 44900, colors: ['negro', 'azul', 'vinotinto'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+    price: PRECIO_CAMISETA, colors: ['negro', 'azul', 'vinotinto'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
   { id: 'cam-virgen', name: 'camiseta virgen', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33], zoom: 3.1,
     line: 'oversize · espalda', desc: 'virgen con los ojos vendados y rosario entre las manos, bajo zemar. frente liso.',
-    price: 44900, colors: ['negro', 'gris'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+    price: PRECIO_CAMISETA, colors: ['negro', 'gris'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
   { id: 'cam-ventana', name: 'camiseta ventana', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .30],
-    line: 'oversize · pecho y espalda', desc: 'flores amarillas que bajan por la espalda. al frente, zemar sobre una ventana abierta a las montañas.',
-    price: 44900, colors: ['cafe', 'negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+    line: 'oversize · frente y espalda', desc: 'en la espalda, zemar sobre una ventana abierta a las montañas con el sello hecho en colombia. al frente, flores amarillas que suben del costado al hombro.',
+    price: PRECIO_CAMISETA, colors: ['cafe', 'negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
   { id: 'cam-midnight', name: 'camiseta midnight', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33], zoom: 3.1,
     line: 'oversize · espalda', desc: 'un dóberman saliendo de la sombra con midnight en letra fina. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
 
   // ---------- mujer: ajustada, estampado al frente ----------
   { id: 'muj-zemar-halo', name: 'camiseta zemar halo', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .25],
     line: 'ajustada · frente', desc: 'zemar en glitter rosa con un halo encima.',
-    price: 44900, colors: ['rosado', 'blanco', 'negro'], sizes: DAMA_SIZES, photo: true, badge: 'nuevo' },
+    price: PRECIO_CAMISETA, colors: ['rosado', 'blanco', 'negro'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true, badge: 'nuevo' },
   { id: 'muj-zemar-glitter', name: 'camiseta zemar glitter', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .25],
     line: 'ajustada · frente', desc: 'zemar tipo sticker en glitter morado y negro, con brillos alrededor.',
-    price: 44900, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
   { id: 'muj-cherries', name: 'camiseta cherries', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
     line: 'ajustada · frente', desc: 'dos cerezas brillantes bajo cherries en letra de colegio.',
-    price: 44900, colors: ['rosado', 'blanco'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['rosado', 'blanco'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
   { id: 'muj-do-all-things', name: 'camiseta do all things with love', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
     line: 'ajustada · frente', desc: 'do all things with love en letras rosadas infladas.',
-    price: 44900, colors: ['blanco', 'rosado', 'negro'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['blanco', 'rosado', 'negro'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
   { id: 'muj-superstar', name: 'camiseta superstar', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
     line: 'ajustada · frente', desc: 'estrella rosada con superstar arriba y just enjoy abajo.',
-    price: 44900, colors: ['blanco', 'negro'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['blanco', 'negro'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
   { id: 'muj-self-love', name: 'camiseta self love', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
     line: 'ajustada · frente', desc: 'self love en blanco con un lirio rosado encima.',
-    price: 44900, colors: ['negro'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
   { id: 'muj-giunic', name: 'camiseta giunic nails', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
     line: 'ajustada · frente', desc: 'estrella de leopardo con labios rojos y giunic nails en letras infladas.',
-    price: 44900, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, cuts: DAMA_CUTS, sizesByCut: DAMA_BY_CUT, photo: true },
+
+  // ---------- niño: estampado grande en la espalda ----------
+  { id: 'nino-dino', name: 'camiseta zemar a rodar', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .33], zoom: 3.4,
+    line: 'niño · pecho y espalda', desc: 'un dinosaurio en patineta con gafas y zemar a rodar. versión pequeña en el pecho.',
+    price: PRECIO_CAMISETA, colors: ['negro', 'beige', 'blanco'], sizes: NINO_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'nino-oso', name: 'camiseta osito', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .33], zoom: 3.4,
+    line: 'niño · pecho y espalda', desc: 'un osito de peluche con gorra zemar y un parlante. parche zemar en el pecho.',
+    price: PRECIO_CAMISETA, colors: ['negro', 'beige', 'blanco'], sizes: NINO_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'nino-skate', name: 'camiseta skate algo viene', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .33], zoom: 3.4,
+    line: 'niño · pecho y espalda', desc: 'dos patinetas con estrellas entre zemar y algo viene. zemar pequeño en el pecho.',
+    price: PRECIO_CAMISETA, colors: ['blanco', 'beige'], sizes: NINO_SIZES, photo: true },
+  { id: 'nino-beisbol', name: 'camiseta béisbol', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .33], zoom: 3.4,
+    line: 'niño · pecho y espalda', desc: 'una pelota de béisbol con gafas, gorra y bate, bajo zemar en letra de equipo. zemar pequeño en el pecho.',
+    price: PRECIO_CAMISETA, colors: ['beige', 'blanco'], sizes: NINO_SIZES, photo: true },
+  { id: 'nino-zemar-cromado', name: 'camiseta zemar cromado', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .30], zoom: 3.4,
+    line: 'niño · espalda', desc: 'zemar en letras cromadas tipo grafiti. frente liso.',
+    price: PRECIO_CAMISETA, colors: ['blanco'], sizes: NINO_SIZES, photo: true },
+  { id: 'nino-crayones', name: 'camiseta dino crayones', cat: 'camisetas', aud: 'niño', type: 'tee', side: 'back', focus: [.31, .33], zoom: 3.4,
+    line: 'niño · espalda', desc: 'un dinosaurio verde rodeado de letras de colores, playing with crayons. frente liso.',
+    price: PRECIO_CAMISETA, colors: ['blanco'], sizes: NINO_SIZES, photo: true },
 
   // ---------- hombre: las demás ----------
   { id: 'cam-mascara', name: 'camiseta máscara de oro', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33],
     line: 'oversize · espalda', desc: 'máscara de oro precolombina envuelta en espinas, con zemar arriba. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-jaguar', name: 'camiseta jaguar', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27],
     line: 'oversize · espalda', desc: 'un jaguar descansando sobre zemar. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-condor-hueso', name: 'camiseta cóndor de hueso', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.31, .28], zoom: 3.1,
     line: 'oversize · espalda', desc: 'un cóndor mitad plumas, mitad hueso, cruzando zemar en dorado. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-goat', name: 'camiseta goat', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.31, .32],
     line: 'oversize · espalda', desc: 'cabra de pelo largo con goat en letras de pelo. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-world-tour', name: 'camiseta world tour', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.29, .33],
     line: 'oversize · espalda', desc: 'mano de esqueleto dorada llena de anillos de campeón. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['negro'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-bulldogs', name: 'camiseta bulldogs', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .30],
     line: 'oversize · pecho y espalda', desc: 'tres bulldogs franceses con cadenas frente a zemar. logo pequeño en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
   { id: 'cam-cruces', name: 'camiseta cruces', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27],
     line: 'oversize · pecho y espalda', desc: 'cinco cruces de colores, una con zemar. versión mini en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
+    price: PRECIO_CAMISETA, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
 
   // ---------- ocultos ----------
   { id: 'vaso-20', activo: false, name: 'vaso térmico 20 oz', cat: 'vasos', aud: 'todos', type: 'tumbler',
@@ -113,11 +145,12 @@ const PRODUCTS = [
 // lo único que se muestra: grilla, filtros, búsqueda y contadores usan esto
 const CATALOG = PRODUCTS.filter((p) => p.activo !== false);
 
-const COLOR_FILTER = ['gris', 'cafe', 'azul', 'vinotinto', 'rosado'];
+const COLOR_FILTER = ['gris', 'cafe', 'azul', 'vinotinto', 'rosado', 'beige'];
 const FILTERS = [
   { key: 'todo', label: 'todo', test: () => true },
   { key: 'hombre', label: 'hombre', test: (p) => p.aud === 'hombre' },
   { key: 'mujer', label: 'mujer', test: (p) => p.aud === 'mujer' },
+  { key: 'niño', label: 'niño', test: (p) => p.aud === 'niño' },
   { key: 'negras', label: 'negras', test: (p) => p.colors.includes('negro') },
   { key: 'blancas', label: 'blancas', test: (p) => p.colors.includes('blanco') },
   { key: 'color', label: 'de color', test: (p) => p.colors.some((c) => COLOR_FILTER.includes(c)) },
@@ -301,8 +334,8 @@ function productSVG(p, color, view = 'front', cls = '') {
    es un recorte con background-size/position, sin archivos extra. */
 const PHOTO_RATIO = 2000 / 1611; // alto / ancho del mockup
 const PHOTO_VIEW = {
-  back:   { c: () => [.295, .34], z: 2.3 },
-  front:  { c: () => [.72, .34], z: 2.3 },
+  back:   { c: (p) => [.295, (p.crop && p.crop.y) || .34], z: 2.3 },
+  front:  { c: (p) => [.72, (p.crop && p.crop.y) || .34], z: 2.3 },
   detail: { c: (p) => p.focus, z: 4.2 },
 };
 const clamp01 = (n) => Math.min(1, Math.max(0, n));
@@ -318,7 +351,7 @@ function photoDiv(p, color, view, cls = '', a = 1.25, decorative = false, tune =
   const py = clamp01((cy * z * PHOTO_RATIO - a / 2) / (z * PHOTO_RATIO - a));
   const label = `${p.name}, ${COLORS[color].label}, ${VIEW_LABEL[view]}`;
   const aria = decorative ? 'aria-hidden="true"' : `role="img" aria-label="${esc(label)}"`;
-  const style = `background-image:url('${esc(IMG(p.id, color))}');background-size:${z * 100}% auto;background-position:${(px * 100).toFixed(2)}% ${(py * 100).toFixed(2)}%`;
+  const style = `background-image:url('${esc(IMG(p.id, color, tune.cut))}');background-size:${z * 100}% auto;background-position:${(px * 100).toFixed(2)}% ${(py * 100).toFixed(2)}%`;
   return `<span class="ph ${cls}" ${aria} style="${style}"></span>`;
 }
 
@@ -328,10 +361,18 @@ const viewsOf = (p) => (p.side === 'back'
   : [['front', 'frente'], ['back', 'espalda'], ['detail', 'detalle']]);
 
 // usa la foto propia si existe; si no, el SVG
-function productVisual(p, color, view = mainView(p), cls = '', a = 1.25) {
-  if (p.photo) return photoDiv(p, color, view, cls, a);
+function productVisual(p, color, view = mainView(p), cls = '', a = 1.25, cut) {
+  if (p.photo) return photoDiv(p, color, view, cls, a, false, { cut });
   return productSVG(p, color, view, cls);
 }
+
+// tallas según el corte; los productos sin corte usan p.sizes
+const sizesOf = (p, cut) => (p.sizesByCut && p.sizesByCut[cut]) || p.sizes;
+const firstCut = (p) => (p.cuts ? p.cuts[0] : undefined);
+const defaultSize = (p, cut) => {
+  const list = sizesOf(p, cut);
+  return list.length ? (list.includes('M') ? 'M' : list[0]) : null;
+};
 
 /* ---------- hotspots sobre la foto (espalda) ----------
    x, y en % de la caja de la foto; left = la burbuja abre hacia la izquierda */
@@ -339,8 +380,10 @@ const hotspotsOf = (p) => [
   { x: 50, y: 36, text: 'estampado DTF · no se cuartea' },
   { x: 25, y: 30, text: 'algodón y poliéster · suave y resistente' },
   p.aud === 'mujer'
-    ? { x: 72, y: 62, text: 'corte ajustado · para ella', left: true }
-    : { x: 76, y: 62, text: 'corte oversize · pide tu talla normal', left: true },
+    ? { x: 72, y: 62, text: 'clásica o corta · tú eliges', left: true }
+    : p.aud === 'niño'
+      ? { x: 76, y: 62, text: 'para los pequeños · tallas 2 a 16', left: true }
+      : { x: 76, y: 62, text: 'corte oversize · pide tu talla normal', left: true },
 ];
 const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 
@@ -371,12 +414,12 @@ function initHotspots() {
 }
 
 /* ---------- botones de opción ---------- */
-function renderOpts(container, values, current, { swatch = false, onPick }) {
+function renderOpts(container, values, current, { swatch = false, label = (v) => v, onPick }) {
   container.innerHTML = values.map((v) => {
     if (swatch) {
       return `<button type="button" class="opt swatch" data-v="${esc(v)}" aria-pressed="${v === current}"><span class="sw" style="background:${COLORS[v].swatch}"></span><span class="sw-name mono">${esc(COLORS[v].label)}</span></button>`;
     }
-    return `<button type="button" class="opt" data-v="${esc(v)}" aria-pressed="${v === current}">${esc(v)}</button>`;
+    return `<button type="button" class="opt" data-v="${esc(v)}" aria-pressed="${v === current}">${esc(label(v))}</button>`;
   }).join('');
   container.onclick = (e) => {
     const b = e.target.closest('.opt');
@@ -391,6 +434,7 @@ function renderOpts(container, values, current, { swatch = false, onPick }) {
    ========================================================== */
 const hero = { p: byId('cam-condor-andes'), color: 'blanco', size: 'M' };
 hero.view = mainView(hero.p);
+hero.cut = firstCut(hero.p);
 const VIEWS = viewsOf(hero.p);
 
 const pad2 = (n) => String(n).padStart(2, '0');
@@ -398,14 +442,14 @@ const pad2 = (n) => String(n).padStart(2, '0');
 function renderHeroStage() {
   // en la portada la camiseta va más cerca: la cabeza del maniquí no tapa la palabra gigante
   $('#heroStage').innerHTML = hero.p.photo && hero.view !== 'detail'
-    ? photoDiv(hero.p, hero.color, hero.view, 'stage-svg', 1.25, false, { z: 2.4, cy: .365 })
-    : productVisual(hero.p, hero.color, hero.view, 'stage-svg');
+    ? photoDiv(hero.p, hero.color, hero.view, 'stage-svg', 1.25, false, { z: 2.4, cy: .365, cut: hero.cut })
+    : productVisual(hero.p, hero.color, hero.view, 'stage-svg', 1.25, hero.cut);
   // los hotspots están ubicados sobre la vista principal de la foto
   $('#heroStageWrap').classList.toggle('no-hs', !(hero.p.photo && hero.view === mainView(hero.p)));
 }
 function renderHeroThumbs() {
   $('#heroThumbs').innerHTML = VIEWS.map(([v, label]) =>
-    `<button type="button" class="thumb" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${productVisual(hero.p, hero.color, v, '', 4 / 3)}</button>`
+    `<button type="button" class="thumb" data-view="${v}" aria-pressed="${v === hero.view}" aria-label="ver ${label}">${productVisual(hero.p, hero.color, v, '', 4 / 3, hero.cut)}</button>`
   ).join('');
 }
 function renderHeroCapsule() {
@@ -435,13 +479,25 @@ function askTalla() {
 
 function initHero() {
   $('.stage-label .mono').textContent = hero.p.name;
-  $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa, ${money(hero.p.price)}`);
-  $('#heroPrice').textContent = money(hero.p.price);
-  $('#heroChipPrice').textContent = money(hero.p.price);
+  $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa, ${money(PRECIO_CAMISETA)}`);
+  $('#heroPrice').textContent = money(PRECIO_CAMISETA);
+  $('#heroChipPrice').textContent = money(PRECIO_CAMISETA);
   $('#statTees').textContent = CATALOG.length;
-  $('#statPrice').textContent = money(hero.p.price);
+  $('#statPrice').textContent = money(PRECIO_CAMISETA);
   $('#heroHotspots').innerHTML = hotspotsHTML('hhs', hero.p);
-  renderOpts($('#heroSizes'), hero.p.sizes, hero.size, { onPick: (v) => { hero.size = v; } });
+  const renderHeroSizes = () => renderOpts($('#heroSizes'), sizesOf(hero.p, hero.cut), hero.size, { onPick: (v) => { hero.size = v; } });
+  renderHeroSizes();
+  $('#heroCutsRow').hidden = !hero.p.cuts;
+  if (hero.p.cuts) {
+    renderOpts($('#heroCuts'), hero.p.cuts, hero.cut, {
+      label: (v) => CUTS[v],
+      onPick: (v) => {
+        hero.cut = v;
+        if (!sizesOf(hero.p, v).includes(hero.size)) hero.size = defaultSize(hero.p, v);
+        renderHeroSizes(); renderHeroStage(); renderHeroThumbs();
+      },
+    });
+  }
   renderOpts($('#heroColors'), hero.p.colors, hero.color, {
     swatch: true,
     onPick: (v) => { hero.color = v; renderHeroStage(); renderHeroThumbs(); },
@@ -454,7 +510,7 @@ function initHero() {
   $('#heroCapsule').addEventListener('click', pick);
   $('#heroPrev').addEventListener('click', () => stepHeroView(-1));
   $('#heroNext').addEventListener('click', () => stepHeroView(1));
-  $('#heroBuy').addEventListener('click', () => addToBag(hero.p.id, hero.color, hero.size, 1));
+  $('#heroBuy').addEventListener('click', () => addToBag(hero.p.id, hero.color, hero.size, 1, hero.cut));
   document.querySelectorAll('[data-wa-talla]').forEach((b) => b.addEventListener('click', askTalla));
 }
 
@@ -469,7 +525,7 @@ function matchesFilter(p, f) {
 }
 function matchesQuery(p, q) {
   if (!q) return true;
-  const hay = norm([p.name, p.desc, p.line, p.cat, p.aud, ...p.colors.map((c) => COLORS[c].label)].join(' '));
+  const hay = norm([p.name, p.desc, p.line, p.cat, p.aud, ...p.colors.map((c) => COLORS[c].label), p.cuts ? 'clasica corta crop baby' : ''].join(' '));
   return norm(q).split(/\s+/).every((w) => hay.includes(w));
 }
 
@@ -481,8 +537,10 @@ function renderFilters() {
   }).join('');
 }
 
-// al pasar el mouse la tarjeta alterna a la otra cara de la camiseta
-const altPhoto = (p, color) => photoDiv(p, color, p.side === 'back' ? 'front' : 'back', 'alt', 1.25, true);
+// al pasar el mouse la tarjeta alterna a la otra cara de la camiseta, o al corte corto en mujer
+const altPhoto = (p, color) => (p.cuts
+  ? photoDiv(p, color, p.side, 'alt', 1.25, true, { cut: 'corta' })
+  : photoDiv(p, color, p.side === 'back' ? 'front' : 'back', 'alt', 1.25, true));
 
 // un punto de color cambia la foto de esa tarjeta
 function setCardColor(card, p, color) {
@@ -503,6 +561,7 @@ function cardHTML(p) {
         ${productVisual(p, color)}
         ${p.photo ? altPhoto(p, color) : ''}
         ${badge}
+        ${p.cuts ? '<span class="also-cut mono">también corta</span>' : ''}
       </button>
       <button type="button" class="icon-btn light quick-add" data-add="${p.id}" aria-label="añadir ${esc(p.name)} a la bolsa">${PLUS}</button>
     </div>
@@ -585,8 +644,7 @@ function initSearch() {
 /* ==========================================================
    Ficha de producto
    ========================================================== */
-const sheet = { p: null, color: null, size: null, qty: 1, view: null };
-const defaultSize = (p) => (p.sizes.length ? (p.sizes.includes('M') ? 'M' : p.sizes[0]) : null);
+const sheet = { p: null, color: null, size: null, qty: 1, view: null, cut: undefined };
 
 /* guía de tallas en cm (ancho de pecho y largo). Pendiente del usuario:
    cuando estén las medidas, llenar así: { S: [52, 70], M: [55, 72], ... } */
@@ -604,22 +662,27 @@ function renderSizeGuide() {
 function renderSheetImg() {
   const el = $('#sheetImg'), p = sheet.p;
   el.classList.toggle('has-photo', !!p.photo);
-  el.innerHTML = productVisual(p, sheet.color, sheet.view)
+  el.innerHTML = productVisual(p, sheet.color, sheet.view, '', 1.25, sheet.cut)
     + (p.photo && sheet.view === mainView(p) ? `<div class="hotspots">${hotspotsHTML('shs', p)}</div>` : '')
     + (p.photo ? `<div class="sheet-views">${viewsOf(p).map(([v, label]) =>
       `<button type="button" class="opt" data-view="${v}" aria-pressed="${v === sheet.view}">${label}</button>`).join('')}</div>` : '');
 }
 
-// el "+" de la tarjeta: talla M (o la primera) y el color que muestra la tarjeta
+function renderSheetSizes() {
+  renderOpts($('#sheetSizes'), sizesOf(sheet.p, sheet.cut), sheet.size, { onPick: (v) => { sheet.size = v; } });
+}
+
+// el "+" de la tarjeta: corte clásico, talla M (o la primera) y el color que muestra la tarjeta
 function quickAdd(id, color) {
   const p = byId(id);
-  if (p) addToBag(p.id, color || p.colors[0], defaultSize(p), 1);
+  if (p) addToBag(p.id, color || p.colors[0], defaultSize(p, firstCut(p)), 1, firstCut(p));
 }
 
 function openSheet(id, color) {
   const p = byId(id);
   if (!p) return;
-  Object.assign(sheet, { p, color: color || p.colors[0], size: defaultSize(p), qty: 1, view: mainView(p) });
+  const cut = firstCut(p);
+  Object.assign(sheet, { p, color: color || p.colors[0], size: defaultSize(p, cut), qty: 1, view: mainView(p), cut });
   $('#sheetLine').textContent = p.line;
   $('#sheetTitle').textContent = p.name;
   $('#sheetDesc').textContent = p.desc;
@@ -631,7 +694,19 @@ function openSheet(id, color) {
   $('#sheetSizesPick').hidden = !hasSizes;
   $('#sizeGuide').hidden = !hasSizes;
   $('#sizeGuide').open = false;
-  if (hasSizes) renderOpts($('#sheetSizes'), p.sizes, sheet.size, { onPick: (v) => { sheet.size = v; } });
+  if (hasSizes) renderSheetSizes();
+  $('#sheetCutsPick').hidden = !p.cuts;
+  if (p.cuts) {
+    renderOpts($('#sheetCuts'), p.cuts, sheet.cut, {
+      label: (v) => CUTS[v],
+      onPick: (v) => { // cambia foto y tallas; el color se conserva
+        sheet.cut = v;
+        if (!sizesOf(p, v).includes(sheet.size)) sheet.size = defaultSize(p, v);
+        renderSheetSizes();
+        renderSheetImg();
+      },
+    });
+  }
   $('#sheet').showModal();
 }
 
@@ -647,11 +722,11 @@ function initSheet() {
   $('#qtyMinus').addEventListener('click', () => setQty(sheet.qty - 1));
   $('#qtyPlus').addEventListener('click', () => setQty(sheet.qty + 1));
   $('#sheetAdd').addEventListener('click', () => {
-    addToBag(sheet.p.id, sheet.color, sheet.size, sheet.qty);
+    addToBag(sheet.p.id, sheet.color, sheet.size, sheet.qty, sheet.cut);
     dlg.close();
   });
   $('#sheetOrder').addEventListener('click', () => {
-    openWhatsApp(orderMessage([{ id: sheet.p.id, color: sheet.color, size: sheet.size, qty: sheet.qty }]));
+    openWhatsApp(orderMessage([{ id: sheet.p.id, color: sheet.color, size: sheet.size, qty: sheet.qty, cut: sheet.cut }]));
   });
 }
 
@@ -663,20 +738,26 @@ let bag = loadBag();
 function loadBag() {
   try {
     const data = JSON.parse(localStorage.getItem(BAG_KEY) || '[]');
-    return Array.isArray(data) ? data.filter((it) => {
+    if (!Array.isArray(data)) return [];
+    return data.map((it) => {
       const p = byId(it.id);
-      return p && p.activo !== false && p.colors.includes(it.color) && it.qty > 0;
-    }) : [];
+      return p && p.cuts && !p.cuts.includes(it.cut) ? { ...it, cut: firstCut(p) } : it; // bolsas viejas sin corte
+    }).filter((it) => {
+      const p = byId(it.id);
+      if (!p || p.activo === false || !p.colors.includes(it.color) || !(it.qty > 0)) return false;
+      const list = sizesOf(p, it.cut);
+      return !list.length || list.includes(it.size);
+    });
   } catch { return []; }
 }
 function saveBag() {
   try { localStorage.setItem(BAG_KEY, JSON.stringify(bag)); } catch { /* sin almacenamiento: la bolsa vive solo en esta visita */ }
 }
 
-function addToBag(id, color, size, qty) {
-  const found = bag.find((it) => it.id === id && it.color === color && it.size === size);
+function addToBag(id, color, size, qty, cut) {
+  const found = bag.find((it) => it.id === id && it.color === color && it.size === size && it.cut === cut);
   if (found) found.qty += qty;
-  else bag.push({ id, color, size, qty });
+  else bag.push({ id, color, size, qty, cut });
   saveBag();
   renderBag();
   toast('añadido a la bolsa···');
@@ -685,7 +766,8 @@ function addToBag(id, color, size, qty) {
 function itemLine(it, i) {
   const p = byId(it.id);
   const size = it.size ? `, talla ${it.size}` : '';
-  return `${i + 1}. ${p.name} (${p.aud}) — ${COLORS[it.color].label}${size} × ${it.qty} — ${money(p.price * it.qty)}`;
+  const aud = p.cuts ? `${p.aud}, ${CUTS[it.cut]}` : p.aud;
+  return `${i + 1}. ${p.name} (${aud}) — ${COLORS[it.color].label}${size} × ${it.qty} — ${money(p.price * it.qty)}`;
 }
 const totalOf = (items) => items.reduce((s, it) => s + byId(it.id).price * it.qty, 0);
 
@@ -710,8 +792,8 @@ function renderBag() {
     ? bag.map((it, i) => {
       const p = byId(it.id);
       return `<li class="bag-item">
-        <div class="mini">${productVisual(p, it.color)}</div>
-        <div><h4>${esc(p.name)}</h4><span class="mono">${COLORS[it.color].label}${it.size ? ' · talla ' + it.size : ''} · × ${it.qty}</span></div>
+        <div class="mini">${productVisual(p, it.color, undefined, '', 1.25, it.cut)}</div>
+        <div><h4>${esc(p.name)}</h4><span class="mono">${it.cut ? CUTS[it.cut] + ' · ' : ''}${COLORS[it.color].label}${it.size ? ' · talla ' + it.size : ''} · × ${it.qty}</span></div>
         <div class="right"><span class="price" style="font-size:var(--t-sm)">${money(p.price * it.qty)}</span><button type="button" class="link-btn mono" data-i="${i}" aria-label="quitar ${esc(p.name)}">quitar</button></div>
       </li>`;
     }).join('')
@@ -860,7 +942,14 @@ function initMotion() {
   }
 }
 
+/* ---------- redes y contacto: todos los enlaces salen de las constantes de arriba ---------- */
+function initLinks() {
+  const LINKS = { instagram: INSTAGRAM, tiktok: TIKTOK, whatsapp: `https://wa.me/${WHATSAPP}`, email: `mailto:${EMAIL}` };
+  document.querySelectorAll('[data-link]').forEach((a) => { a.href = LINKS[a.dataset.link]; });
+}
+
 /* ---------- arranque ---------- */
+initLinks();
 initHero();
 initHotspots();
 initCatalog();
