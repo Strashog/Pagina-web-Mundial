@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>ZEMAR — algo viene</title>
-  <meta name="description" content="zemar: camisetas, vasos, termos y tazas para niños, jóvenes y adultos. bogotá, colombia. pide por whatsapp y drop 01 disponible; únete a la lista de espera del drop 02.">
+  <meta name="description" content="zemar: camisetas oversize para hombre y camisetas para mujer. bogotá, colombia. pide por whatsapp. únete a la lista de espera del drop 02.">
   <meta name="theme-color" content="#0E0E0E">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_CO">
   <meta property="og:site_name" content="ZEMAR">
   <meta property="og:title" content="ZEMAR — algo viene">
-  <meta property="og:description" content="drop 01 ya disponible: 8 camisetas oversize. el drop 02 viene. pedidos por whatsapp, envíos en bogotá.">
+  <meta property="og:description" content="19 diseños de camisetas para hombre y mujer. el drop 02 viene. pedidos por whatsapp, envíos en bogotá.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230E0E0E'/%3E%3Ccircle cx='9.6' cy='20.6' r='2.3' fill='%23F1EEE7'/%3E%3Ccircle cx='15.4' cy='15.6' r='3.2' fill='%23F1EEE7'/%3E%3Ccircle cx='22.2' cy='9.6' r='4.3' fill='%23FF5B1F'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,9 +27,10 @@
     <header class="nav" id="nav">
       <a href="#inicio" class="logo nav-logo" aria-label="zemar, ir al inicio">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
       <ul class="nav-links">
-        <li><a href="#inicio" data-section="inicio" aria-current="true">inicio</a></li>
         <li><a href="#catalogo" data-section="catalogo" data-filter="todo">catálogo</a></li>
-        <li><a href="#catalogo" data-filter="camisetas">camisetas</a></li>
+        <li><a href="#catalogo" data-filter="hombre">hombre</a></li>
+        <li><a href="#catalogo" data-filter="mujer">mujer</a></li>
+        <li><a href="#drop" data-filter="todo">drop 02</a></li>
         <li><a href="#lista" data-section="lista">lista de espera</a></li>
       </ul>
       <div class="nav-tools">
@@ -49,7 +50,7 @@
       </div>
       <div class="search" id="search">
         <label class="sr-only" for="searchInput">buscar en el catálogo</label>
-        <input id="searchInput" type="search" placeholder="camiseta, jaguar, vaso···" autocomplete="off" tabindex="-1">
+        <input id="searchInput" type="search" placeholder="camiseta, jaguar, cherries···" autocomplete="off" tabindex="-1">
       </div>
     </header>
 
@@ -58,17 +59,13 @@
         <a href="#inicio" class="logo live" aria-label="zemar, inicio">zemar<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></a>
       </div>
 
-      <!-- palabra gigante partida alrededor de la camiseta -->
-      <div class="giant" id="giant" aria-hidden="true">
-        <span class="word l">zem</span>
-        <span class="over">drop 01</span>
-        <span class="word r">ar</span>
-      </div>
+      <!-- el logo en gigante, detrás de la camiseta -->
+      <div class="giant" id="giant" aria-hidden="true">zemar<span class="zdots"><i></i><i></i><i></i></span></div>
 
       <div class="hero-head">
         <span class="pill"><span class="dot"></span>ya disponible</span>
-        <h1 id="heroTitle">drop 01.<span class="tono">ocho camisetas.</span></h1>
-        <p class="hero-lead">algodón 100 %, estampado dtf, corte oversize. envíos en bogotá, pedidos por whatsapp.</p>
+        <h1 id="heroTitle">la colección.<span class="tono">hombre y mujer.</span></h1>
+        <p class="hero-lead">algodón y poliéster, estampado DTF. oversize para él, ajustada para ella. envíos en bogotá, pedidos por whatsapp.</p>
       </div>
 
       <div class="hero-stage" id="heroStageWrap">
@@ -76,7 +73,7 @@
           <div id="heroStage"></div>
           <div class="hotspots" id="heroHotspots"></div>
           <div class="stage-label glass">
-            <span class="mono">camiseta máscara de oro</span>
+            <span class="mono">camiseta cóndor de los andes</span>
             <span class="price" id="heroChipPrice">$44.900</span>
           </div>
         </div>
@@ -96,10 +93,10 @@
           <div class="opts" id="heroSizes" role="group" aria-label="talla"></div>
         </div>
         <div class="hero-actions">
-          <button class="btn go btn-arrow" id="heroBuy" type="button" aria-label="añadir camiseta máscara de oro a la bolsa">añadir · <span id="heroPrice">$44.900</span>
+          <button class="btn go btn-arrow" id="heroBuy" type="button" aria-label="añadir camiseta cóndor de los andes a la bolsa">añadir · <span id="heroPrice">$44.900</span>
             <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
           </button>
-          <a class="btn glass btn-arrow" href="#catalogo" data-filter="camisetas">ver el drop
+          <a class="btn glass btn-arrow" href="#catalogo" data-filter="todo">ver todo
             <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
           </a>
         </div>
@@ -121,10 +118,10 @@
           </div>
         </div>
 
-        <div class="stats glass" role="list" aria-label="el drop en cifras">
+        <div class="stats glass" role="list" aria-label="la colección en cifras">
           <div class="stat" role="listitem">
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4 3.5 6.5 5.5 10.5 7 9.8V20h10V9.8l1.5.7 2-4L16 4a4 4 0 0 1-8 0Z"/></svg></span>
-            <div><b id="statTees">8</b><span class="mono">camisetas</span></div>
+            <div><b id="statTees">19</b><span class="mono">diseños</span></div>
           </div>
           <div class="stat" role="listitem">
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 12.5V4h8.5l8.5 8.5-8 8-9-8Z"/><circle cx="8" cy="8.5" r="1.5"/></svg></span>
@@ -159,10 +156,10 @@
 
   <main>
     <!-- ========== C. Cinta ========== -->
-    <div class="ticker mono" aria-label="drop 01 ya disponible. algo viene: drop 02, fecha por anunciar. envíos en bogotá, pronto a toda colombia. pedidos por whatsapp. para niños, jóvenes y adultos.">
+    <div class="ticker mono" aria-label="hombre y mujer, ya disponible. algo viene: drop 02, fecha por anunciar. envíos en bogotá, pronto a toda colombia. pedidos por whatsapp.">
       <div class="ticker-track" aria-hidden="true">
-        <span><b>DROP 01</b> · YA DISPONIBLE · algo viene··· · <b>DROP 02</b> · <b>FECHA POR ANUNCIAR</b> · ENVÍOS EN BOGOTÁ · PRONTO A TODA COLOMBIA · PEDIDOS POR WHATSAPP · NIÑOS · JÓVENES · ADULTOS ·</span>
-        <span><b>DROP 01</b> · YA DISPONIBLE · algo viene··· · <b>DROP 02</b> · <b>FECHA POR ANUNCIAR</b> · ENVÍOS EN BOGOTÁ · PRONTO A TODA COLOMBIA · PEDIDOS POR WHATSAPP · NIÑOS · JÓVENES · ADULTOS ·</span>
+        <span>HOMBRE Y MUJER · YA DISPONIBLE · algo viene··· · <b>DROP 02</b> · <b>FECHA POR ANUNCIAR</b> · ENVÍOS EN BOGOTÁ · PRONTO A TODA COLOMBIA · PEDIDOS POR WHATSAPP ·</span>
+        <span>HOMBRE Y MUJER · YA DISPONIBLE · algo viene··· · <b>DROP 02</b> · <b>FECHA POR ANUNCIAR</b> · ENVÍOS EN BOGOTÁ · PRONTO A TODA COLOMBIA · PEDIDOS POR WHATSAPP ·</span>
       </div>
     </div>
 
@@ -171,11 +168,11 @@
       <div class="wrap">
         <div class="benefit">
           <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7.5"/><path d="M6 9.5c3.5 1.4 8.5 1.4 12 0M6 14.5c3.5-1.4 8.5-1.4 12 0M12 4.5c-2 4.5-2 10.5 0 15"/></svg></span>
-          <div><h3>algodón 100 %</h3><span class="mono">se siente</span></div>
+          <div><h3>algodón y poliéster</h3><span class="mono">suave, no se encoge</span></div>
         </div>
         <div class="benefit">
           <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.5s6 6.4 6 10.8a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5Z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg></span>
-          <div><h3>estampado dtf</h3><span class="mono">no se cuartea</span></div>
+          <div><h3>estampado DTF</h3><span class="mono">no se cuartea</span></div>
         </div>
         <div class="benefit">
           <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4 3.5 6.5 5.5 10.5 7 9.8V20h10V9.8l1.5.7 2-4L16 4a4 4 0 0 1-8 0Z"/></svg></span>
@@ -193,8 +190,8 @@
       <div class="wrap">
         <div class="cat-head">
           <h2 id="catTitle">catálogo</h2>
-          <span class="pill" id="catCount">12 productos</span>
-          <span class="spec mono">algodón 100 % · estampado dtf · tallas s a xl</span>
+          <span class="pill" id="catCount">19 diseños</span>
+          <span class="spec mono">algodón y poliéster · estampado DTF · hombre S a XL · mujer S, M y XL</span>
         </div>
 
         <div class="filters" id="filters" role="group" aria-label="filtrar catálogo"></div>
@@ -204,7 +201,7 @@
           <article class="feature" id="drop" aria-labelledby="dropTitle">
             <span class="ghost-word" aria-hidden="true">pronto</span>
             <span class="pill"><span class="dot go"></span>drop 02</span>
-            <h3 id="dropTitle">lo que sigue···</h3>
+            <h3 id="dropTitle">lo que sigue<span class="zdots" aria-hidden="true"><i></i><i></i><i></i></span></h3>
             <p>todavía no lo ves. déjanos tu whatsapp y te avisamos primero.</p>
             <a class="btn dark btn-arrow" href="#lista">avísame
               <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
@@ -236,8 +233,8 @@
           <div class="field">
             <label class="mono" for="wInteres">me interesa</label>
             <select id="wInteres" name="interes">
-              <option value="camisetas">camisetas</option>
-              <option value="vasos y termos">vasos y termos</option>
+              <option value="hombre">hombre</option>
+              <option value="mujer">mujer</option>
               <option value="todo" selected>todo</option>
             </select>
           </div>
@@ -360,10 +357,10 @@
 <dialog class="menu-sheet" id="menu" aria-label="menú">
   <div class="grab" aria-hidden="true"></div>
   <ul>
-    <li><a href="#inicio">inicio</a></li>
     <li><a href="#catalogo" data-filter="todo">catálogo</a></li>
-    <li><a href="#catalogo" data-filter="camisetas">camisetas</a></li>
-    <li><a href="#catalogo" data-filter="vasos">vasos y termos</a></li>
+    <li><a href="#catalogo" data-filter="hombre">hombre</a></li>
+    <li><a href="#catalogo" data-filter="mujer">mujer</a></li>
+    <li><a href="#drop" data-filter="todo">drop 02</a></li>
     <li><a href="#lista">lista de espera</a></li>
   </ul>
   <button class="btn ghost" type="button" id="menuClose">cerrar</button>

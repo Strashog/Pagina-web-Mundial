@@ -13,66 +13,114 @@ const COLORS = {
   hueso:        { label: 'hueso',        fabric: '#F1EEE7', swatch: '#F1EEE7' },
   piedra:       { label: 'piedra',       fabric: '#6F6B64', swatch: '#6F6B64' },
   blanco:       { label: 'blanco',       fabric: '#FFFFFF', swatch: '#FFFFFF' },
+  gris:         { label: 'gris',         fabric: '#3A383A', swatch: '#3A383A' },
+  cafe:         { label: 'café',         fabric: '#4A3326', swatch: '#4A3326' },
+  azul:         { label: 'azul rey',     fabric: '#1F4689', swatch: '#1F4689' },
+  vinotinto:    { label: 'vinotinto',    fabric: '#601927', swatch: '#601927' },
+  rosado:       { label: 'rosado',       fabric: '#E9B4C3', swatch: '#E9B4C3' },
   transparente: { label: 'transparente', fabric: 'rgba(241,238,231,.10)', swatch: 'transparent' },
 };
 
-const ADULT = ['S', 'M', 'L', 'XL', 'XXL'];
-const KIDS = ['4', '6', '8', '10', '12'];
-const TEE_SIZES = ['S', 'M', 'L', 'XL']; // según la guía de tallas S–XL
+const TEE_SIZES = ['S', 'M', 'L', 'XL'];  // hombre
+const DAMA_SIZES = ['S', 'M', 'XL'];      // mujer (confirmar si hay L)
 
-// foto de producto: un mockup con la espalda a la izquierda y el frente a la derecha.
-// fx, fy = centro del estampado de la espalda (fracción de la imagen) para la vista detalle.
-const PH = (id, fx = .3, fy = .3) => ({ src: `assets/productos/${id}.webp`, focus: [fx, fy] });
+// foto de producto: un mockup por color, espalda a la izquierda y frente a la derecha.
+const IMG = (id, color) => `assets/productos/${id}-${color}.webp`;
 
-/* Catálogo de arranque.
-   OJO: los precios (y los nombres de vasos, termos y taza) son DE EJEMPLO; el usuario los confirma.
-   photo (opcional): mockup propio, ver PH(). Si no hay foto, se dibuja el SVG. */
+/* side = dónde está el estampado ('back' en hombre, 'front' en mujer); es la vista principal.
+   focus = centro del estampado (fracción de la imagen), para la vista detalle.
+   Precios: hombre $44.900 (confirmado). mujer $44.900 = DE EJEMPLO, el usuario lo confirma.
+   Vasos, termo y taza: fuera de la página con activo: false (nombres y precios de ejemplo). */
 const PRODUCTS = [
-  { id: 'cam-mascara', name: 'camiseta máscara de oro', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · espalda', desc: 'máscara de oro precolombina envuelta en espinas, con zemar arriba. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: zemar + máscara de oro', photo: PH('cam-mascara', .30, .33), badge: 'nuevo' },
-  { id: 'cam-jaguar', name: 'camiseta jaguar', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · espalda', desc: 'un jaguar descansando sobre zemar. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: jaguar sobre zemar', photo: PH('cam-jaguar', .30, .27), badge: 'más pedida' },
-  { id: 'cam-condor-hueso', name: 'camiseta cóndor de hueso', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · espalda', desc: 'un cóndor mitad plumas, mitad hueso, cruzando zemar en dorado. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: zemar dorado + cóndor', photo: PH('cam-condor-hueso', .31, .28) },
-  { id: 'cam-goat', name: 'camiseta goat', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · espalda', desc: 'cabra de pelo largo con goat en letras de pelo. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: cabra + goat', photo: PH('cam-goat', .31, .32) },
-  { id: 'cam-world-tour', name: 'camiseta world tour', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · espalda', desc: 'mano de esqueleto dorada llena de anillos de campeón. frente liso.',
-    price: 44900, colors: ['negro'], sizes: TEE_SIZES, print: 'espalda: mano dorada + world tour', photo: PH('cam-world-tour', .29, .33) },
-  { id: 'cam-bulldogs', name: 'camiseta bulldogs', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
-    line: 'oversize · pecho y espalda', desc: 'tres bulldogs franceses con cadenas frente a zemar. logo pequeño en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: zemar; espalda: zemar + bulldogs', photo: PH('cam-bulldogs', .30, .30) },
-  { id: 'cam-condor-andes', name: 'camiseta cóndor de los andes', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+  // ---------- hombre: la protagonista y las nuevas ----------
+  { id: 'cam-condor-andes', name: 'camiseta cóndor de los andes', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .29], zoom: 3.5,
     line: 'oversize · pecho y espalda', desc: 'un cóndor sobre la montaña con zemar en letra cursiva. firma pequeña en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: zemar cursiva; espalda: cóndor', photo: PH('cam-condor-andes', .30, .29) },
-  { id: 'cam-cruces', name: 'camiseta cruces', cat: 'camisetas', aud: 'jóvenes', type: 'tee',
+    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true, badge: 'más vendida' },
+  { id: 'cam-algo-viene', name: 'camiseta algo viene', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27], zoom: 3,
+    line: 'oversize · espalda', desc: 'zemar en cursiva que cruza toda la espalda, con algo viene debajo. frente liso.',
+    price: 44900, colors: ['negro', 'azul', 'vinotinto'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'cam-virgen', name: 'camiseta virgen', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33], zoom: 3.1,
+    line: 'oversize · espalda', desc: 'virgen con los ojos vendados y rosario entre las manos, bajo zemar. frente liso.',
+    price: 44900, colors: ['negro', 'gris'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'cam-ventana', name: 'camiseta ventana', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .30],
+    line: 'oversize · pecho y espalda', desc: 'flores amarillas que bajan por la espalda. al frente, zemar sobre una ventana abierta a las montañas.',
+    price: 44900, colors: ['cafe', 'negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'cam-midnight', name: 'camiseta midnight', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33], zoom: 3.1,
+    line: 'oversize · espalda', desc: 'un dóberman saliendo de la sombra con midnight en letra fina. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
+
+  // ---------- mujer: ajustada, estampado al frente ----------
+  { id: 'muj-zemar-halo', name: 'camiseta zemar halo', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .25],
+    line: 'ajustada · frente', desc: 'zemar en glitter rosa con un halo encima.',
+    price: 44900, colors: ['rosado', 'blanco', 'negro'], sizes: DAMA_SIZES, photo: true, badge: 'nuevo' },
+  { id: 'muj-zemar-glitter', name: 'camiseta zemar glitter', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .25],
+    line: 'ajustada · frente', desc: 'zemar tipo sticker en glitter morado y negro, con brillos alrededor.',
+    price: 44900, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, photo: true },
+  { id: 'muj-cherries', name: 'camiseta cherries', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
+    line: 'ajustada · frente', desc: 'dos cerezas brillantes bajo cherries en letra de colegio.',
+    price: 44900, colors: ['rosado', 'blanco'], sizes: DAMA_SIZES, photo: true },
+  { id: 'muj-do-all-things', name: 'camiseta do all things with love', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
+    line: 'ajustada · frente', desc: 'do all things with love en letras rosadas infladas.',
+    price: 44900, colors: ['blanco', 'rosado', 'negro'], sizes: DAMA_SIZES, photo: true },
+  { id: 'muj-superstar', name: 'camiseta superstar', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
+    line: 'ajustada · frente', desc: 'estrella rosada con superstar arriba y just enjoy abajo.',
+    price: 44900, colors: ['blanco', 'negro'], sizes: DAMA_SIZES, photo: true },
+  { id: 'muj-self-love', name: 'camiseta self love', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
+    line: 'ajustada · frente', desc: 'self love en blanco con un lirio rosado encima.',
+    price: 44900, colors: ['negro'], sizes: DAMA_SIZES, photo: true },
+  { id: 'muj-giunic', name: 'camiseta giunic nails', cat: 'camisetas', aud: 'mujer', type: 'tee', side: 'front', focus: [.71, .27],
+    line: 'ajustada · frente', desc: 'estrella de leopardo con labios rojos y giunic nails en letras infladas.',
+    price: 44900, colors: ['negro', 'blanco', 'rosado'], sizes: DAMA_SIZES, photo: true },
+
+  // ---------- hombre: las demás ----------
+  { id: 'cam-mascara', name: 'camiseta máscara de oro', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33],
+    line: 'oversize · espalda', desc: 'máscara de oro precolombina envuelta en espinas, con zemar arriba. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-jaguar', name: 'camiseta jaguar', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27],
+    line: 'oversize · espalda', desc: 'un jaguar descansando sobre zemar. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-condor-hueso', name: 'camiseta cóndor de hueso', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.31, .28], zoom: 3.1,
+    line: 'oversize · espalda', desc: 'un cóndor mitad plumas, mitad hueso, cruzando zemar en dorado. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-goat', name: 'camiseta goat', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.31, .32],
+    line: 'oversize · espalda', desc: 'cabra de pelo largo con goat en letras de pelo. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-world-tour', name: 'camiseta world tour', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.29, .33],
+    line: 'oversize · espalda', desc: 'mano de esqueleto dorada llena de anillos de campeón. frente liso.',
+    price: 44900, colors: ['negro'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-bulldogs', name: 'camiseta bulldogs', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .30],
+    line: 'oversize · pecho y espalda', desc: 'tres bulldogs franceses con cadenas frente a zemar. logo pequeño en el pecho.',
+    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
+  { id: 'cam-cruces', name: 'camiseta cruces', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .27],
     line: 'oversize · pecho y espalda', desc: 'cinco cruces de colores, una con zemar. versión mini en el pecho.',
-    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, print: 'pecho: cruces mini; espalda: cruces', photo: PH('cam-cruces', .30, .27) },
-  { id: 'vaso-20', name: 'vaso térmico 20 oz', cat: 'vasos', aud: 'todos', type: 'tumbler',
+    price: 44900, colors: ['blanco'], sizes: TEE_SIZES, photo: true },
+
+  // ---------- ocultos ----------
+  { id: 'vaso-20', activo: false, name: 'vaso térmico 20 oz', cat: 'vasos', aud: 'todos', type: 'tumbler',
     line: 'acero · 20 oz', desc: 'mantiene frío o caliente por horas. tapa con pitillo.',
     price: 54900, colors: ['negro', 'hueso'], sizes: [], print: 'ícono (uv o láser)' },
-  { id: 'vaso-vidrio', name: 'vaso de vidrio 16 oz', cat: 'vasos', aud: 'todos', type: 'glass',
+  { id: 'vaso-vidrio', activo: false, name: 'vaso de vidrio 16 oz', cat: 'vasos', aud: 'todos', type: 'glass',
     line: 'vidrio · 16 oz', desc: 'vidrio con tapa y pitillo. logo en hueso.',
     price: 29900, colors: ['transparente'], sizes: [], print: 'logo en hueso' },
-  { id: 'termo-500', name: 'termo nocturno 500 ml', cat: 'termos', aud: 'todos', type: 'bottle',
+  { id: 'termo-500', activo: false, name: 'termo nocturno 500 ml', cat: 'termos', aud: 'todos', type: 'bottle',
     line: 'acero · 500 ml', desc: 'termo de doble pared con aro para llevar. logo en el tercio superior.',
     price: 69900, colors: ['negro', 'piedra'], sizes: [], print: 'logo vertical en el tercio superior' },
-  { id: 'taza-11', name: 'taza algo viene 11 oz', cat: 'vasos', aud: 'todos', type: 'mug',
+  { id: 'taza-11', activo: false, name: 'taza algo viene 11 oz', cat: 'vasos', aud: 'todos', type: 'mug',
     line: 'cerámica · 11 oz', desc: 'para el café de la espera. "algo viene." en sublimación.',
     price: 34900, colors: ['hueso'], sizes: [], print: '"algo viene." (sublimación)' },
 ];
 
+// lo único que se muestra: grilla, filtros, búsqueda y contadores usan esto
+const CATALOG = PRODUCTS.filter((p) => p.activo !== false);
+
+const COLOR_FILTER = ['gris', 'cafe', 'azul', 'vinotinto', 'rosado'];
 const FILTERS = [
-  { key: 'todo', label: 'todo' },
-  { key: 'camisetas', label: 'camisetas' },
-  { key: 'vasos', label: 'vasos y termos' },
-  { key: 'niños', label: 'niños' },
-  { key: 'jóvenes', label: 'jóvenes' },
-  { key: 'adultos', label: 'adultos' },
+  { key: 'todo', label: 'todo', test: () => true },
+  { key: 'hombre', label: 'hombre', test: (p) => p.aud === 'hombre' },
+  { key: 'mujer', label: 'mujer', test: (p) => p.aud === 'mujer' },
+  { key: 'negras', label: 'negras', test: (p) => p.colors.includes('negro') },
+  { key: 'blancas', label: 'blancas', test: (p) => p.colors.includes('blanco') },
+  { key: 'color', label: 'de color', test: (p) => p.colors.some((c) => COLOR_FILTER.includes(c)) },
 ];
 
 /* ---------- utilidades ---------- */
@@ -253,27 +301,29 @@ function productSVG(p, color, view = 'front', cls = '') {
    es un recorte con background-size/position, sin archivos extra. */
 const PHOTO_RATIO = 2000 / 1611; // alto / ancho del mockup
 const PHOTO_VIEW = {
-  back:   { c: (p) => [p.photo.focus[0], .34], z: 2.3 },
+  back:   { c: () => [.295, .34], z: 2.3 },
   front:  { c: () => [.72, .34], z: 2.3 },
-  detail: { c: (p) => p.photo.focus, z: 4.2 },
+  detail: { c: (p) => p.focus, z: 4.2 },
 };
 const clamp01 = (n) => Math.min(1, Math.max(0, n));
 const VIEW_LABEL = { back: 'espalda', front: 'frente', detail: 'detalle del estampado' };
 
 // a = alto / ancho de la caja donde va la foto
-function photoDiv(p, color, view, cls = '', a = 1.25, decorative = false) {
-  const { c, z } = PHOTO_VIEW[view];
-  const [cx, cy] = c(p);
+function photoDiv(p, color, view, cls = '', a = 1.25, decorative = false, tune = {}) {
+  const { c, z: baseZ } = PHOTO_VIEW[view];
+  const z = tune.z || (view === 'detail' && p.zoom) || baseZ; // zoom: para estampados anchos
+  const [cx, baseCy] = c(p);
+  const cy = tune.cy || baseCy;
   const px = clamp01((cx * z - .5) / (z - 1));
   const py = clamp01((cy * z * PHOTO_RATIO - a / 2) / (z * PHOTO_RATIO - a));
   const label = `${p.name}, ${COLORS[color].label}, ${VIEW_LABEL[view]}`;
   const aria = decorative ? 'aria-hidden="true"' : `role="img" aria-label="${esc(label)}"`;
-  const style = `background-image:url('${esc(p.photo.src)}');background-size:${z * 100}% auto;background-position:${(px * 100).toFixed(2)}% ${(py * 100).toFixed(2)}%`;
+  const style = `background-image:url('${esc(IMG(p.id, color))}');background-size:${z * 100}% auto;background-position:${(px * 100).toFixed(2)}% ${(py * 100).toFixed(2)}%`;
   return `<span class="ph ${cls}" ${aria} style="${style}"></span>`;
 }
 
-const mainView = (p) => (p.photo ? 'back' : 'front');
-const viewsOf = (p) => (p.photo
+const mainView = (p) => p.side || 'front';
+const viewsOf = (p) => (p.side === 'back'
   ? [['back', 'espalda'], ['front', 'frente'], ['detail', 'detalle']]
   : [['front', 'frente'], ['back', 'espalda'], ['detail', 'detalle']]);
 
@@ -285,15 +335,17 @@ function productVisual(p, color, view = mainView(p), cls = '', a = 1.25) {
 
 /* ---------- hotspots sobre la foto (espalda) ----------
    x, y en % de la caja de la foto; left = la burbuja abre hacia la izquierda */
-const HOTSPOTS = [
-  { x: 50, y: 40, text: 'estampado dtf · no se cuartea' },
-  { x: 27, y: 28, text: 'algodón 100 % peinado' },
-  { x: 70, y: 70, text: 'corte oversize · pide tu talla normal', left: true },
+const hotspotsOf = (p) => [
+  { x: 50, y: 36, text: 'estampado DTF · no se cuartea' },
+  { x: 25, y: 30, text: 'algodón y poliéster · suave y resistente' },
+  p.aud === 'mujer'
+    ? { x: 72, y: 62, text: 'corte ajustado · para ella', left: true }
+    : { x: 76, y: 62, text: 'corte oversize · pide tu talla normal', left: true },
 ];
 const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 
-function hotspotsHTML(prefix) {
-  return HOTSPOTS.map((h, i) => `<div class="hs${h.left ? ' left' : ''}" style="left:${h.x}%;top:${h.y}%">
+function hotspotsHTML(prefix, p) {
+  return hotspotsOf(p).map((h, i) => `<div class="hs${h.left ? ' left' : ''}" style="left:${h.x}%;top:${h.y}%">
       <button type="button" class="hotspot" aria-expanded="false" aria-controls="${prefix}-${i}" aria-label="${esc(h.text)}">${PLUS}</button>
       <span class="hs-bubble glass" id="${prefix}-${i}">${esc(h.text)}</span>
     </div>`).join('');
@@ -337,16 +389,19 @@ function renderOpts(container, values, current, { swatch = false, onPick }) {
 /* ==========================================================
    Portada
    ========================================================== */
-const hero = { p: byId('cam-mascara'), color: 'negro', size: 'M' };
+const hero = { p: byId('cam-condor-andes'), color: 'blanco', size: 'M' };
 hero.view = mainView(hero.p);
 const VIEWS = viewsOf(hero.p);
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
 function renderHeroStage() {
-  $('#heroStage').innerHTML = productVisual(hero.p, hero.color, hero.view, 'stage-svg');
-  // los hotspots están ubicados sobre la espalda de la foto
-  $('#heroStageWrap').classList.toggle('no-hs', !(hero.p.photo && hero.view === 'back'));
+  // en la portada la camiseta va más cerca: la cabeza del maniquí no tapa la palabra gigante
+  $('#heroStage').innerHTML = hero.p.photo && hero.view !== 'detail'
+    ? photoDiv(hero.p, hero.color, hero.view, 'stage-svg', 1.25, false, { z: 2.4, cy: .365 })
+    : productVisual(hero.p, hero.color, hero.view, 'stage-svg');
+  // los hotspots están ubicados sobre la vista principal de la foto
+  $('#heroStageWrap').classList.toggle('no-hs', !(hero.p.photo && hero.view === mainView(hero.p)));
 }
 function renderHeroThumbs() {
   $('#heroThumbs').innerHTML = VIEWS.map(([v, label]) =>
@@ -383,9 +438,9 @@ function initHero() {
   $('#heroBuy').setAttribute('aria-label', `añadir ${hero.p.name} a la bolsa, ${money(hero.p.price)}`);
   $('#heroPrice').textContent = money(hero.p.price);
   $('#heroChipPrice').textContent = money(hero.p.price);
-  $('#statTees').textContent = PRODUCTS.filter((p) => p.cat === 'camisetas' && p.photo).length;
+  $('#statTees').textContent = CATALOG.length;
   $('#statPrice').textContent = money(hero.p.price);
-  $('#heroHotspots').innerHTML = hotspotsHTML('hhs');
+  $('#heroHotspots').innerHTML = hotspotsHTML('hhs', hero.p);
   renderOpts($('#heroSizes'), hero.p.sizes, hero.size, { onPick: (v) => { hero.size = v; } });
   renderOpts($('#heroColors'), hero.p.colors, hero.color, {
     swatch: true,
@@ -410,33 +465,43 @@ let filter = 'todo';
 let query = '';
 
 function matchesFilter(p, f) {
-  if (f === 'todo') return true;
-  if (f === 'vasos') return ['vasos', 'termos'].includes(p.cat);
-  return p.cat === f || p.aud === f;
+  return FILTERS.find((x) => x.key === f).test(p);
 }
 function matchesQuery(p, q) {
   if (!q) return true;
-  const hay = norm([p.name, p.desc, p.line, p.cat, p.aud, p.cat === 'vasos' || p.cat === 'termos' ? 'vasos y termos tazas' : ''].join(' '));
+  const hay = norm([p.name, p.desc, p.line, p.cat, p.aud, ...p.colors.map((c) => COLORS[c].label)].join(' '));
   return norm(q).split(/\s+/).every((w) => hay.includes(w));
 }
 
 function renderFilters() {
   $('#filters').innerHTML = FILTERS.map(({ key, label }) => {
-    const n = PRODUCTS.filter((p) => matchesFilter(p, key)).length;
-    if (!n && key !== 'todo') return ''; // sin productos (p. ej. niños) no se muestra
+    const n = CATALOG.filter((p) => matchesFilter(p, key)).length;
+    if (!n && key !== 'todo') return ''; // sin productos no se muestra
     return `<button type="button" class="opt" data-f="${esc(key)}" aria-pressed="${key === filter}">${esc(label)}<span class="n">${n}</span></button>`;
   }).join('');
+}
+
+// al pasar el mouse la tarjeta alterna a la otra cara de la camiseta
+const altPhoto = (p, color) => photoDiv(p, color, p.side === 'back' ? 'front' : 'back', 'alt', 1.25, true);
+
+// un punto de color cambia la foto de esa tarjeta
+function setCardColor(card, p, color) {
+  card.dataset.color = color;
+  const box = card.querySelector('.card-img');
+  box.querySelectorAll('.ph').forEach((n) => n.remove());
+  box.insertAdjacentHTML('afterbegin', productVisual(p, color) + altPhoto(p, color));
+  card.querySelectorAll('.dot-c').forEach((d) => d.setAttribute('aria-pressed', String(d.dataset.color === color)));
 }
 
 function cardHTML(p) {
   const color = p.colors[0];
   const badge = p.badge ? `<span class="badge mono">${esc(p.badge)}</span>` : '';
-  const sw = p.colors.map((c) => `<i style="background:${COLORS[c].swatch}" title="${COLORS[c].label}"></i>`).join('');
-  return `<article class="card">
+  const sw = p.colors.map((c) => `<button type="button" class="dot-c" data-color="${c}" aria-pressed="${c === color}" aria-label="ver en ${COLORS[c].label}" title="${COLORS[c].label}"><i style="background:${COLORS[c].swatch}"></i></button>`).join('');
+  return `<article class="card" data-color="${color}">
     <div class="card-media">
       <button type="button" class="card-img${p.photo ? ' has-photo' : ''}" data-id="${p.id}" aria-label="ver ${esc(p.name)}">
         ${productVisual(p, color)}
-        ${p.photo ? photoDiv(p, color, 'front', 'alt', 1.25, true) : ''}
+        ${p.photo ? altPhoto(p, color) : ''}
         ${badge}
       </button>
       <button type="button" class="icon-btn light quick-add" data-add="${p.id}" aria-label="añadir ${esc(p.name)} a la bolsa">${PLUS}</button>
@@ -444,7 +509,7 @@ function cardHTML(p) {
     <div class="card-meta">
       <h3>${esc(p.name)}</h3>
       <span class="line mono">${esc(p.line)}</span>
-      <div class="card-row"><span class="swatches" aria-label="colores: ${p.colors.map((c) => COLORS[c].label).join(', ')}">${sw}</span><span class="price">${money(p.price)}</span></div>
+      <div class="card-row"><span class="swatches" role="group" aria-label="colores">${sw}</span><span class="price">${money(p.price)}</span></div>
     </div>
   </article>`;
 }
@@ -452,12 +517,12 @@ function cardHTML(p) {
 function renderGrid() {
   const grid = $('#grid');
   grid.querySelectorAll('.card, .empty').forEach((n) => n.remove());
-  const list = PRODUCTS.filter((p) => matchesFilter(p, filter) && matchesQuery(p, query));
+  const list = CATALOG.filter((p) => matchesFilter(p, filter) && matchesQuery(p, query));
   $('#drop').hidden = filter !== 'todo' || !!query;
   grid.insertAdjacentHTML('beforeend', list.length
     ? list.map(cardHTML).join('')
     : '<p class="empty mono">nada por aquí··· todavía</p>');
-  $('#catCount').textContent = `${list.length} ${list.length === 1 ? 'producto' : 'productos'}`;
+  $('#catCount').textContent = `${list.length} ${list.length === 1 ? 'diseño' : 'diseños'}`;
 }
 
 function setFilter(f) {
@@ -475,10 +540,21 @@ function initCatalog() {
   });
   $('#grid').addEventListener('click', (e) => {
     const add = e.target.closest('.quick-add');
-    if (add) { e.stopPropagation(); quickAdd(add.dataset.add); return; }
+    const card = e.target.closest('.card');
+    if (add) { e.stopPropagation(); quickAdd(add.dataset.add, card.dataset.color); return; }
+    const dot = e.target.closest('.dot-c');
+    if (dot) { openSheet(card.querySelector('.card-img').dataset.id, dot.dataset.color); return; }
     const b = e.target.closest('.card-img');
-    if (b) openSheet(b.dataset.id);
+    if (b) openSheet(b.dataset.id, card.dataset.color);
   });
+  const previewColor = (e) => {
+    const dot = e.target.closest && e.target.closest('.dot-c');
+    if (!dot) return;
+    const card = dot.closest('.card');
+    if (card.dataset.color !== dot.dataset.color) setCardColor(card, byId(card.querySelector('.card-img').dataset.id), dot.dataset.color);
+  };
+  $('#grid').addEventListener('mouseover', previewColor);
+  $('#grid').addEventListener('focusin', previewColor);
   // los enlaces del nav y el botón del drop también filtran
   document.querySelectorAll('a[data-filter]').forEach((a) =>
     a.addEventListener('click', () => setFilter(a.dataset.filter)));
@@ -509,7 +585,7 @@ function initSearch() {
 /* ==========================================================
    Ficha de producto
    ========================================================== */
-const sheet = { p: null, color: null, size: null, qty: 1 };
+const sheet = { p: null, color: null, size: null, qty: 1, view: null };
 const defaultSize = (p) => (p.sizes.length ? (p.sizes.includes('M') ? 'M' : p.sizes[0]) : null);
 
 /* guía de tallas en cm (ancho de pecho y largo). Pendiente del usuario:
@@ -526,22 +602,24 @@ function renderSizeGuide() {
 }
 
 function renderSheetImg() {
-  const el = $('#sheetImg');
-  el.classList.toggle('has-photo', !!sheet.p.photo);
-  el.innerHTML = productVisual(sheet.p, sheet.color)
-    + (sheet.p.photo ? `<div class="hotspots">${hotspotsHTML('shs')}</div>` : '');
+  const el = $('#sheetImg'), p = sheet.p;
+  el.classList.toggle('has-photo', !!p.photo);
+  el.innerHTML = productVisual(p, sheet.color, sheet.view)
+    + (p.photo && sheet.view === mainView(p) ? `<div class="hotspots">${hotspotsHTML('shs', p)}</div>` : '')
+    + (p.photo ? `<div class="sheet-views">${viewsOf(p).map(([v, label]) =>
+      `<button type="button" class="opt" data-view="${v}" aria-pressed="${v === sheet.view}">${label}</button>`).join('')}</div>` : '');
 }
 
-// el "+" de la tarjeta: talla M (o la primera) y el primer color
-function quickAdd(id) {
+// el "+" de la tarjeta: talla M (o la primera) y el color que muestra la tarjeta
+function quickAdd(id, color) {
   const p = byId(id);
-  if (p) addToBag(p.id, p.colors[0], defaultSize(p), 1);
+  if (p) addToBag(p.id, color || p.colors[0], defaultSize(p), 1);
 }
 
-function openSheet(id) {
+function openSheet(id, color) {
   const p = byId(id);
   if (!p) return;
-  Object.assign(sheet, { p, color: p.colors[0], size: defaultSize(p), qty: 1 });
+  Object.assign(sheet, { p, color: color || p.colors[0], size: defaultSize(p), qty: 1, view: mainView(p) });
   $('#sheetLine').textContent = p.line;
   $('#sheetTitle').textContent = p.name;
   $('#sheetDesc').textContent = p.desc;
@@ -559,6 +637,10 @@ function openSheet(id) {
 
 function initSheet() {
   const dlg = $('#sheet');
+  $('#sheetImg').addEventListener('click', (e) => {
+    const v = e.target.closest('[data-view]');
+    if (v) { sheet.view = v.dataset.view; renderSheetImg(); }
+  });
   $('#sheetClose').addEventListener('click', () => dlg.close());
   dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); }); // clic afuera
   const setQty = (n) => { sheet.qty = Math.max(1, Math.min(20, n)); $('#qtyOut').textContent = sheet.qty; };
@@ -581,7 +663,10 @@ let bag = loadBag();
 function loadBag() {
   try {
     const data = JSON.parse(localStorage.getItem(BAG_KEY) || '[]');
-    return Array.isArray(data) ? data.filter((it) => byId(it.id) && it.qty > 0) : [];
+    return Array.isArray(data) ? data.filter((it) => {
+      const p = byId(it.id);
+      return p && p.activo !== false && p.colors.includes(it.color) && it.qty > 0;
+    }) : [];
   } catch { return []; }
 }
 function saveBag() {
@@ -600,7 +685,7 @@ function addToBag(id, color, size, qty) {
 function itemLine(it, i) {
   const p = byId(it.id);
   const size = it.size ? `, talla ${it.size}` : '';
-  return `${i + 1}. ${p.name} — ${COLORS[it.color].label}${size} × ${it.qty} — ${money(p.price * it.qty)}`;
+  return `${i + 1}. ${p.name} (${p.aud}) — ${COLORS[it.color].label}${size} × ${it.qty} — ${money(p.price * it.qty)}`;
 }
 const totalOf = (items) => items.reduce((s, it) => s + byId(it.id).price * it.qty, 0);
 
