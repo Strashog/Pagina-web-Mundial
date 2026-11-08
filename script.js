@@ -36,7 +36,8 @@ const DAMA_CUTS = ['clasica', 'corta'];
 const DAMA_BY_CUT = { clasica: DAMA_SIZES, corta: ['S-M', 'L-XL'] };
 
 // foto de producto: un mockup por color, espalda a la izquierda y frente a la derecha.
-const IMG = (id, color, cut) => `assets/productos/${id}-${color}${cut === 'corta' ? '-corta' : ''}.webp`;
+const IMG_VERSION = '5'; // súbelo cada vez que se reemplace una foto con el mismo nombre
+const IMG = (id, color, cut) => `assets/productos/${id}-${color}${cut === 'corta' ? '-corta' : ''}.webp?v=${IMG_VERSION}`;
 
 /* side = dónde está el estampado ('back' en hombre, 'front' en mujer); es la vista principal.
    focus = centro del estampado (fracción de la imagen), para la vista detalle.
@@ -55,6 +56,11 @@ const PRODUCTS = [
     line: 'oversize · espalda', desc: 'virgen con los ojos vendados y rosario entre las manos, bajo zemar. frente liso.',
     price: PRECIO_CAMISETA, colors: ['negro', 'gris'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
   { id: 'cam-ventana', name: 'camiseta ventana', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .30],
+    hotspots: [ // a los lados del recuadro, no encima
+      { x: 22, y: 30, text: 'algodón y poliéster · suave y resistente' },
+      { x: 80, y: 55, text: 'corte oversize · pide tu talla normal', left: true },
+      { x: 50, y: 88, text: 'estampado DTF · no se cuartea' },
+    ],
     line: 'oversize · frente y espalda', desc: 'en la espalda, zemar sobre una ventana abierta a las montañas con el sello hecho en colombia. al frente, flores amarillas que suben del costado al hombro.',
     price: PRECIO_CAMISETA, colors: ['cafe', 'negro'], sizes: TEE_SIZES, photo: true, badge: 'nuevo' },
   { id: 'cam-midnight', name: 'camiseta midnight', cat: 'camisetas', aud: 'hombre', type: 'tee', side: 'back', focus: [.30, .33], zoom: 3.1,
@@ -376,7 +382,8 @@ const defaultSize = (p, cut) => {
 
 /* ---------- hotspots sobre la foto (espalda) ----------
    x, y en % de la caja de la foto; left = la burbuja abre hacia la izquierda */
-const hotspotsOf = (p) => [
+// un producto puede traer los suyos en p.hotspots; si no, estos
+const hotspotsOf = (p) => p.hotspots || [
   { x: 50, y: 36, text: 'estampado DTF · no se cuartea' },
   { x: 25, y: 30, text: 'algodón y poliéster · suave y resistente' },
   p.aud === 'mujer'
