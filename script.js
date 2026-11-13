@@ -383,7 +383,13 @@ const defaultSize = (p, cut) => {
 /* ---------- hotspots sobre la foto (espalda) ----------
    x, y en % de la caja de la foto; left = la burbuja abre hacia la izquierda */
 // un producto puede traer los suyos en p.hotspots; si no, estos
-const hotspotsOf = (p) => p.hotspots || [
+// en niño el estampado ocupa casi toda la espalda: los + van a los lados
+const NINO_HOTSPOTS = [
+  { x: 78, y: 24, text: 'estampado DTF · no se cuartea', left: true },
+  { x: 22, y: 30, text: 'algodón y poliéster · suave y resistente' },
+  { x: 78, y: 70, text: 'para los pequeños · tallas 2 a 16', left: true },
+];
+const hotspotsOf = (p) => p.hotspots || (p.aud === 'niño' ? NINO_HOTSPOTS : null) || [
   { x: 50, y: 36, text: 'estampado DTF · no se cuartea' },
   { x: 25, y: 30, text: 'algodón y poliéster · suave y resistente' },
   p.aud === 'mujer'
@@ -481,7 +487,7 @@ function stepHeroView(dir) {
 }
 
 function askTalla() {
-  openWhatsApp(`hola zemar, tengo una duda con la talla de la ${hero.p.name}`);
+  openWhatsApp('hola zemar, tengo una duda con las tallas. ¿me ayudas a elegir la mía?');
 }
 
 function initHero() {
@@ -653,17 +659,26 @@ function initSearch() {
    ========================================================== */
 const sheet = { p: null, color: null, size: null, qty: 1, view: null, cut: undefined };
 
-/* guía de tallas en cm (ancho de pecho y largo). Pendiente del usuario:
-   cuando estén las medidas, llenar así: { S: [52, 70], M: [55, 72], ... } */
-const SIZE_GUIDE = null;
+/* guía de tallas: medidas de la camiseta en cm, [ancho de axila a axila, largo].
+   Fuente: tabla de medidas del usuario. Una talla sin medidas sale "por confirmar" (hoy, XL de hombre). */
+const SIZE_GUIDE = {
+  hombre:  { S: [51.5, 63.5], M: [55.5, 64.5], L: [58.4, 68.7] },
+  clasica: { S: [43.2, 53], M: [44.5, 55], XL: [54, 58] },
+  corta:   { 'S-M': [51, 36], 'L-XL': [56, 39] },
+  nino:    { '2-4': [35, 39], '6-8': [38.5, 44.5], '10-12': [45.3, 50], '14-16': [48, 57.2] },
+};
+const guideKey = (p, cut) => (p.aud === 'mujer' ? cut : p.aud === 'niño' ? 'nino' : 'hombre');
+const cm = (n) => `${n.toLocaleString('es-CO')} cm`;
 
-function renderSizeGuide() {
-  const note = '<p>si dudas entre dos tallas, escríbenos y te ayudamos a elegir.</p>';
-  $('#sizeGuideBody').innerHTML = SIZE_GUIDE
-    ? `<table><thead><tr><th>talla</th><th>ancho</th><th>largo</th></tr></thead><tbody>${
-      Object.entries(SIZE_GUIDE).map(([t, [a, l]]) => `<tr><td>${esc(t)}</td><td>${a} cm</td><td>${l} cm</td></tr>`).join('')
-    }</tbody></table>${note}`
-    : `<p>medidas por confirmar··· pronto aquí.</p>${note}`;
+// la tabla sigue al producto y al corte que estén abiertos en la ficha
+function renderSizeGuide(p, cut) {
+  const guide = SIZE_GUIDE[guideKey(p, cut)] || {};
+  const rows = sizesOf(p, cut).map((t) => {
+    const m = guide[t];
+    return `<tr><td>${esc(t)}</td>${m ? `<td>${cm(m[0])}</td><td>${cm(m[1])}</td>` : '<td colspan="2">por confirmar</td>'}</tr>`;
+  }).join('');
+  $('#sizeGuideBody').innerHTML = `<table><thead><tr><th>talla</th><th>ancho</th><th>largo</th></tr></thead><tbody>${rows}</tbody></table>
+    <p>ancho de axila a axila y largo total, con la camiseta extendida. si dudas entre dos tallas, escríbenos y te ayudamos a elegir.</p>`;
 }
 
 function renderSheetImg() {
@@ -701,7 +716,7 @@ function openSheet(id, color) {
   $('#sheetSizesPick').hidden = !hasSizes;
   $('#sizeGuide').hidden = !hasSizes;
   $('#sizeGuide').open = false;
-  if (hasSizes) renderSheetSizes();
+  if (hasSizes) { renderSheetSizes(); renderSizeGuide(p, sheet.cut); }
   $('#sheetCutsPick').hidden = !p.cuts;
   if (p.cuts) {
     renderOpts($('#sheetCuts'), p.cuts, sheet.cut, {
@@ -710,6 +725,7 @@ function openSheet(id, color) {
         sheet.cut = v;
         if (!sizesOf(p, v).includes(sheet.size)) sheet.size = defaultSize(p, v);
         renderSheetSizes();
+        renderSizeGuide(p, v);
         renderSheetImg();
       },
     });
@@ -783,6 +799,7 @@ function orderMessage(items) {
     'hola zemar··· quiero hacer este pedido:',
     ...items.map(itemLine),
     `total: ${money(totalOf(items))}`,
+    'pago: contraentrega (pago al recibir)',
     'mi nombre: ',
     'barrio (bogotá): ',
   ].join('\n');
@@ -962,7 +979,6 @@ initHotspots();
 initCatalog();
 initSearch();
 initSheet();
-renderSizeGuide();
 initBag();
 initWaitlist();
 initNav();
