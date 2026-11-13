@@ -5,6 +5,7 @@
    ========================================================== */
 
 const WHATSAPP = '573228913539';
+const WA_DEFAULT = 'hola zemar, quisiera realizar un pedido.'; // mensaje predeterminado de todos los botones de whatsapp
 const INSTAGRAM = 'https://www.instagram.com/zemarcolombia/';
 const TIKTOK = 'https://www.tiktok.com/@zemar658';
 const EMAIL = 'zemarcolombia@gmail.com';
@@ -487,7 +488,7 @@ function stepHeroView(dir) {
 }
 
 function askTalla() {
-  openWhatsApp('hola zemar, tengo una duda con las tallas. ¿me ayudas a elegir la mía?');
+  openWhatsApp(WA_DEFAULT);
 }
 
 function initHero() {
@@ -968,7 +969,7 @@ function initMotion() {
 
 /* ---------- redes y contacto: todos los enlaces salen de las constantes de arriba ---------- */
 function initLinks() {
-  const LINKS = { instagram: INSTAGRAM, tiktok: TIKTOK, whatsapp: `https://wa.me/${WHATSAPP}`, email: `mailto:${EMAIL}` };
+  const LINKS = { instagram: INSTAGRAM, tiktok: TIKTOK, whatsapp: waLink(WA_DEFAULT), email: `mailto:${EMAIL}` };
   document.querySelectorAll('[data-link]').forEach((a) => { a.href = LINKS[a.dataset.link]; });
 }
 
